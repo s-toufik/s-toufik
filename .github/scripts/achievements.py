@@ -1,13 +1,11 @@
-import json
 import os
 import sys
-import urllib.parse
-import urllib.request
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from html import escape
 
-API = "https://api.github.com"
+from github_api import get, search_count
+
 TIERS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond")
 TIER_COLORS = ("#cd7f32", "#c0c7d1", "#f5c542", "#7dd3fc", "#a78bfa")
 LOCKED = "#30363d"
@@ -60,18 +58,6 @@ class Achievement:
             return 1.0
         start = self.thresholds[self.tier] if self.tier >= 0 else 0
         return max(0.0, min(1.0, (self.value - start) / (nxt - start)))
-
-
-def get(path: str, token: str | None, accept: str = "application/vnd.github+json") -> dict | list:
-    request = urllib.request.Request(f"{API}{path}", headers={"Accept": accept, "User-Agent": "profile-achievements"})
-    if token:
-        request.add_header("Authorization", f"Bearer {token}")
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.load(response)
-
-
-def search_count(kind: str, query: str, token: str | None) -> int:
-    return int(get(f"/search/{kind}?q={urllib.parse.quote(query)}&per_page=1", token)["total_count"])
 
 
 def owned_repositories(login: str, token: str | None) -> list[dict]:
