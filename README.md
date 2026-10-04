@@ -29,6 +29,24 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
   <img src="https://streak-stats.demolab.com?user=s-toufik&theme=github-dark-blue&hide_border=true&background=0D1117&ring=60A5FA&fire=38BDF8&currStreakLabel=60A5FA" alt="Contribution streak" />
 </div>
 
+## 🏆 Achievements
+
+<div align="center">
+  <img src="metrics.achievements.svg" alt="Achievements earned on GitHub" />
+</div>
+
+## 📅 A year of contributions
+
+<div align="center">
+  <img src="metrics.isocalendar.svg" alt="Contribution calendar" />
+  <br /><br />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake.svg" />
+    <img src="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" alt="A snake eating the contribution graph" />
+  </picture>
+</div>
+
 ## 🛰️ The homelab platform
 
 One web front door, one page per application, one shared platform underneath. The AI agent is live; **pricelab** and the next applications plug into the same UI and the same foundations.
@@ -118,23 +136,5 @@ Also building the **pricelab** platform: [pricelab-core](https://github.com/s-to
 <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus" />
 <img src="https://img.shields.io/badge/OpenTelemetry-425CC7?style=for-the-badge&logo=opentelemetry&logoColor=white" alt="OpenTelemetry" />
 <img src="https://img.shields.io/badge/Tailscale-242424?style=for-the-badge&logo=tailscale&logoColor=white" alt="Tailscale" />
-
-## 🏆 Achievements
-
-<div align="center">
-  <img src="metrics.achievements.svg" alt="Achievements earned on GitHub" />
-</div>
-
-## 📅 A year of contributions
-
-<div align="center">
-  <img src="metrics.isocalendar.svg" alt="Contribution calendar" />
-  <br /><br />
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake.svg" />
-    <img src="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" alt="A snake eating the contribution graph" />
-  </picture>
-</div>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:38bdf8,45:1d4ed8,100:070b16&height=110&section=footer" width="100%" alt="" />
