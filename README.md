@@ -2,11 +2,11 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b16,55:1d4ed8,100:38bdf8&height=190&section=header&text=s-toufik&fontColor=ffffff&fontSize=56&fontAlignY=36&desc=Building%20a%20homelab%20platform%2C%20one%20clean%20module%20at%20a%20time&descSize=17&descAlignY=58" width="100%" alt="s-toufik" />
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=2800&pause=900&color=60A5FA&center=true&vCenter=true&width=640&lines=AI+agents+that+plan%2C+act+and+check+their+work;Hexagonal+architecture+in+Python+%26+TypeScript;Self-hosted+LLMs%2C+observability+and+data+on+one+server;Clean+code+over+quick+patches" alt="What I build" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=18&duration=3800&pause=1600&color=8B949E&center=true&vCenter=true&width=760&lines=Designing+software+that+stays+maintainable+as+it+grows;Agentic+AI%3A+explicit+routing%2C+tool+use+and+self-review;Self-hosted+platform%3A+observability%2C+data+and+LLMs+end+to+end;Hexagonal+architecture+%C2%B7+typed+Python+%C2%B7+tested+boundaries" alt="Focus areas" />
 
 <p>
-  <img src="https://img.shields.io/badge/Paris-France-1d4ed8?style=flat-square&logo=googlemaps&logoColor=white" alt="Paris, France" />
-  <a href="https://github.com/s-toufik?tab=repositories"><img src="https://img.shields.io/badge/repositories-explore-0ea5e9?style=flat-square&logo=github&logoColor=white" alt="Repositories" /></a>
+  <a href="https://github.com/s-toufik?tab=repositories"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2Fs-toufik&query=%24.public_repos&label=open%20source&suffix=%20public%20repos&style=flat-square&color=1d4ed8&logo=opensourceinitiative&logoColor=white" alt="Open source: public repositories" /></a>
+  <a href="https://github.com/s-toufik/homelab-infra"><img src="https://img.shields.io/badge/experimenting%20with-agents%20%C2%B7%20open%20LLMs%20%C2%B7%20MCP-0ea5e9?style=flat-square&logo=huggingface&logoColor=white" alt="Experimenting with agents, open LLMs and MCP" /></a>
 </p>
 
 </div>
@@ -37,8 +37,6 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 ## 📅 A year of contributions
 
 <div align="center">
-  <img src="metrics.calendar.svg" alt="Contribution calendar" />
-  <br /><br />
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" />
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake.svg" />
