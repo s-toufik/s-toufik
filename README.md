@@ -38,7 +38,7 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 ## 📅 A year of contributions
 
 <div align="center">
-  <img src="metrics.isocalendar.svg" alt="Contribution calendar" />
+  <img src="metrics.calendar.svg" alt="Contribution calendar" />
   <br /><br />
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" />
@@ -49,26 +49,27 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 
 ## 🛰️ The homelab platform
 
-One web front door, one page per application, one shared platform underneath. The AI agent is live; **pricelab** and the next applications plug into the same UI and the same foundations.
+**homelab-ui** is where I control, present and check everything. **homelab-infra** is my server: every stack runs there with Docker Compose. My own applications live on the same server — released as libraries on PyPI and images on Docker Hub — and each one gets its page in the UI as it arrives.
 
 ```text
-                    ┌───────────────────────────── homelab-ui ─────────────────────────────┐
-  you ── browser ──►│ one page per application · live status · links to every tool         │
-                    │ Angular · TypeScript                                                 │
-                    └─────────┬─────────────────────────┬─────────────────────────┬────────┘
-                              ▼                         ▼                         ▼
-                    ┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
-                    │     AI agent     │      │     pricelab     │      │    next app …    │
-                    │ LangGraph · MCP  │      │   coming soon    │      │                  │
-                    └─────────┬────────┘      └─────────┬────────┘      └─────────┬────────┘
-                              └─────────────────────────┼─────────────────────────┘
-                                                        ▼
-  ┌──────────────────────────────────────── platform ────────────────────────────────────────┐
-  │ Python · FastAPI · Pydantic · pycraftcore, the shared foundations                        │
-  │ local LLMs (llama.cpp)  ·  PostgreSQL  ·  MongoDB  ·  Kafka                              │
-  │ OpenTelemetry ─► Prometheus · Loki · Tempo ─► Grafana                                    │
-  │ Docker Compose on one home server · reachable over Tailscale                             │
+                    ┌──────────────────────────── homelab-ui ────────────────────────────┐
+  you ── browser ──►│ control · presentation · health checks                             │
+                    │ a page per application · status and links for every stack          │
+                    └──────────────────────────────────┬─────────────────────────────────┘
+                                                       ▼
+  ┌─ homelab-infra · my server · Docker Compose ───────┴─────────────────────────────────────┐
+  │                                                                                          │
+  │ my applications       AI agent · pricelab · next app …                                   │
+  │                       libraries on PyPI · images on Docker Hub                           │
+  │                                                                                          │
+  │ AI                    local LLMs: llama.cpp behind llama-swap                            │
+  │ observability         OpenTelemetry · Prometheus · Loki · Tempo · Grafana                │
+  │ data & streaming      PostgreSQL · MongoDB · Kafka                                       │
+  │ access                Tailscale                                                          │
   └──────────────────────────────────────────────────────────────────────────────────────────┘
+
+  release:  my repositories ─┬─► PyPI: shared libraries (e.g. pycraftcore)
+                             └─► Docker Hub: application images ─► server: docker compose pull · up
 ```
 
 ## 🚀 Featured projects

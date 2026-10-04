@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Achievements
-        uses: lowlighter/metrics@latest
+        uses: ShawnXxy/metrics@1e49d0b8b932624dd7762147e35ccc137eda09f1
         with:
           filename: metrics.achievements.svg
           token: ${{ secrets.METRICS_TOKEN }}
@@ -30,10 +30,10 @@ jobs:
       - name: Contribution calendar
         uses: lowlighter/metrics@latest
         with:
-          filename: metrics.isocalendar.svg
+          filename: metrics.calendar.svg
           token: ${{ secrets.METRICS_TOKEN }}
           committer_token: ${{ secrets.GITHUB_TOKEN }}
           base: ""
           config_timezone: Europe/Paris
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: full-year
+          plugin_calendar: yes
+          plugin_calendar_limit: 1

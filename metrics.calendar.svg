@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="120" viewBox="0 0 480 120" role="img" aria-label="Contribution calendar">
+  <rect x="0.5" y="0.5" width="479" height="119" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="240" y="54" text-anchor="middle" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#60a5fa">Contribution calendar</text>
+  <text x="240" y="78" text-anchor="middle" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="12" fill="#8b949e">Being generated from my GitHub activity, refreshed daily</text>
+</svg>
