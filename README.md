@@ -6,7 +6,6 @@
 
 <p>
   <img src="https://img.shields.io/badge/Paris-France-1d4ed8?style=flat-square&logo=googlemaps&logoColor=white" alt="Paris, France" />
-  <img src="https://komarev.com/ghpvc/?username=s-toufik&style=flat-square&color=1d4ed8&label=profile+views" alt="Profile views" />
   <a href="https://github.com/s-toufik?tab=repositories"><img src="https://img.shields.io/badge/repositories-explore-0ea5e9?style=flat-square&logo=github&logoColor=white" alt="Repositories" /></a>
 </p>
 
@@ -21,18 +20,37 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 - 📈 Running my own **observability stack**: metrics, logs and traces end to end
 - 🌱 Always adding the next piece — the repositories below keep growing
 
+## 📊 GitHub stats
+
+<div align="center">
+  <img height="170" src="https://github-readme-stats.vercel.app/api?username=s-toufik&show_icons=true&include_all_commits=true&count_private=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa&rank_icon=github" alt="GitHub stats" />
+  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=s-toufik&layout=compact&langs_count=8&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa" alt="Top languages" />
+  <br />
+  <img src="https://streak-stats.demolab.com?user=s-toufik&theme=github-dark-blue&hide_border=true&background=0D1117&ring=60A5FA&fire=38BDF8&currStreakLabel=60A5FA" alt="Contribution streak" />
+</div>
+
 ## 🛰️ The homelab platform
 
-```text
-              ┌──────────────┐  HTTP / SSE  ┌────────────────────┐   MCP   ┌───────────────┐
-  you ──────► │  homelab-ui  │ ───────────► │ agent-orchestrator │ ──────► │ agent-toolbox │
-              └──────┬───────┘              └─────┬────────┬─────┘         └───────┬───────┘
-                     │                            ▼        ▼                       ▼
-                     │                           LLMs   MongoDB          SQL · files · Python
-                     ▼
-        Grafana · Prometheus · Kafka · …  ◄── telemetry from every service
+One web front door, one page per application, one shared platform underneath. The AI agent is live; **pricelab** and the next applications plug into the same UI and the same foundations.
 
-  everything above runs from homelab-infra · shared foundations come from pycraftcore
+```text
+                    ┌───────────────────────────── homelab-ui ─────────────────────────────┐
+  you ── browser ──►│ one page per application · live status · links to every tool         │
+                    │ Angular · TypeScript                                                 │
+                    └─────────┬─────────────────────────┬─────────────────────────┬────────┘
+                              ▼                         ▼                         ▼
+                    ┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
+                    │     AI agent     │      │     pricelab     │      │    next app …    │
+                    │ LangGraph · MCP  │      │   coming soon    │      │                  │
+                    └─────────┬────────┘      └─────────┬────────┘      └─────────┬────────┘
+                              └─────────────────────────┼─────────────────────────┘
+                                                        ▼
+  ┌──────────────────────────────────────── platform ────────────────────────────────────────┐
+  │ Python · FastAPI · Pydantic · pycraftcore, the shared foundations                        │
+  │ local LLMs (llama.cpp)  ·  PostgreSQL  ·  MongoDB  ·  Kafka                              │
+  │ OpenTelemetry ─► Prometheus · Loki · Tempo ─► Grafana                                    │
+  │ Docker Compose on one home server · reachable over Tailscale                             │
+  └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🚀 Featured projects
@@ -100,15 +118,6 @@ Also building the **pricelab** platform: [pricelab-core](https://github.com/s-to
 <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus" />
 <img src="https://img.shields.io/badge/OpenTelemetry-425CC7?style=for-the-badge&logo=opentelemetry&logoColor=white" alt="OpenTelemetry" />
 <img src="https://img.shields.io/badge/Tailscale-242424?style=for-the-badge&logo=tailscale&logoColor=white" alt="Tailscale" />
-
-## 📊 GitHub stats
-
-<div align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=s-toufik&show_icons=true&include_all_commits=true&count_private=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa&rank_icon=github" alt="GitHub stats" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=s-toufik&layout=compact&langs_count=8&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa" alt="Top languages" />
-  <br />
-  <img src="https://streak-stats.demolab.com?user=s-toufik&theme=github-dark-blue&hide_border=true&background=0D1117&ring=60A5FA&fire=38BDF8&currStreakLabel=60A5FA" alt="Contribution streak" />
-</div>
 
 ## 🏆 Achievements
 
