@@ -1,0 +1,2 @@
+push:
+	> git -C /Users/nautilus/SandBox/github_showcase add -A && git -C /Users/nautilus/SandBox/github_showcase commit -m "Own achievements card, platform image" && git -C /Users/nautilus/SandBox/github_showcase pull --rebase && git -C /Users/nautilus/SandBox/github_showcase push
