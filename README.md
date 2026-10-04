@@ -6,7 +6,7 @@
 
 <p>
   <a href="https://github.com/s-toufik?tab=repositories"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2Fs-toufik&query=%24.public_repos&label=open%20source&suffix=%20public%20repos&style=flat-square&color=1d4ed8&logo=opensourceinitiative&logoColor=white" alt="Open source: public repositories" /></a>
-  <a href="https://github.com/s-toufik/homelab-infra"><img src="https://img.shields.io/badge/experimenting%20with-agents%20%C2%B7%20open%20LLMs%20%C2%B7%20MCP-0ea5e9?style=flat-square&logo=huggingface&logoColor=white" alt="Experimenting with agents, open LLMs and MCP" /></a>
+  <a href="https://github.com/s-toufik/homelab-infra"><img src="https://img.shields.io/badge/experimenting%20with-agents%20%C2%B7%20open%20LLMs%20%C2%B7%20MCP-0ea5e9?style=flat-square&logo=huggingface&logoColor=white" alt="Experimenting with agentic systems, open LLMs, MCPs, finance and scientific computing" /></a>
 </p>
 
 </div>
