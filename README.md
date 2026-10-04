@@ -16,7 +16,6 @@
 I build software the way I'd like to maintain it: **clear layers, small swappable parts, and tests that guard the architecture**. My playground is a homelab that grows into a real platform — an AI agent with its own tools, local language models, full observability and data services, all on a single machine.
 
 - 🧠 Designing **AI agents**: planning, tool use over MCP, self-review, routing driven by explicit rules
-- 🏗️ Practising **hexagonal architecture** across Python, TypeScript, Rust and C++
 - 📈 Running my own **observability stack**: metrics, logs and traces end to end
 - 🌱 Always adding the next piece — the repositories below keep growing
 
@@ -51,26 +50,9 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 
 **homelab-ui** is where I control, present and check everything. **homelab-infra** is my server: every stack runs there with Docker Compose. My own applications live on the same server — released as libraries on PyPI and images on Docker Hub — and each one gets its page in the UI as it arrives.
 
-```text
-                    ┌──────────────────────────── homelab-ui ────────────────────────────┐
-  you ── browser ──►│ control · presentation · health checks                             │
-                    │ a page per application · status and links for every stack          │
-                    └──────────────────────────────────┬─────────────────────────────────┘
-                                                       ▼
-  ┌─ homelab-infra · my server · Docker Compose ───────┴─────────────────────────────────────┐
-  │                                                                                          │
-  │ my applications       AI agent · pricelab · next app …                                   │
-  │                       libraries on PyPI · images on Docker Hub                           │
-  │                                                                                          │
-  │ AI                    local LLMs: llama.cpp behind llama-swap                            │
-  │ observability         OpenTelemetry · Prometheus · Loki · Tempo · Grafana                │
-  │ data & streaming      PostgreSQL · MongoDB · Kafka                                       │
-  │ access                Tailscale                                                          │
-  └──────────────────────────────────────────────────────────────────────────────────────────┘
-
-  release:  my repositories ─┬─► PyPI: shared libraries (e.g. pycraftcore)
-                             └─► Docker Hub: application images ─► server: docker compose pull · up
-```
+<div align="center">
+  <img src="homelab-platform.svg" width="100%" alt="Platform overview: homelab-ui for control, presentation and health checks, on top of homelab-infra, a single server running the applications and the platform stacks with Docker Compose; releases go through PyPI and Docker Hub" />
+</div>
 
 ## 🚀 Featured projects
 
