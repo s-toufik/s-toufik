@@ -11,16 +11,16 @@
   </style>
   <rect x="0.5" y="0.5" width="899" height="347" rx="14" fill="#0d1117" stroke="#30363d"/>
   <text x="18" y="32" class="heading">Achievements</text>
-  <text x="882" y="32" text-anchor="end" class="meta">8 of 8 unlocked · updated 2026-10-06</text>
+  <text x="882" y="32" text-anchor="end" class="meta">8 of 8 unlocked · updated 2026-10-07</text>
   <g transform="translate(12 52)">
     <rect width="210" height="132" rx="12" fill="#111827" stroke="#1f2937"/>
     <circle cx="36" cy="38" r="20" fill="#f5c542" fill-opacity="0.14" stroke="#f5c542" stroke-opacity="0.6"/>
     <g transform="translate(24 26)"><circle cx="12" cy="12" r="4" fill="none" stroke="#f5c542" stroke-width="2"/><path d="M2 12h6M16 12h6" stroke="#f5c542" stroke-width="2" stroke-linecap="round"/></g>
     <text x="68" y="33" class="title">Committer</text>
     <text x="68" y="52" class="tier" fill="#f5c542">Gold</text>
-    <text x="18" y="84" class="value">652<tspan class="unit"> commits</tspan></text>
+    <text x="18" y="84" class="value">656<tspan class="unit"> commits</tspan></text>
     <rect x="18" y="96" width="174" height="6" rx="3" fill="#1f2937"/>
-    <rect x="18" y="96" width="52" height="6" rx="3" fill="#f5c542"/>
+    <rect x="18" y="96" width="54" height="6" rx="3" fill="#f5c542"/>
     <text x="18" y="120" class="goal">next tier at 1,000</text>
   </g>
   <g transform="translate(234 52)">
@@ -29,9 +29,9 @@
     <g transform="translate(24 26)"><circle cx="6" cy="5" r="2.5" fill="none" stroke="#7dd3fc" stroke-width="2"/><circle cx="6" cy="19" r="2.5" fill="none" stroke="#7dd3fc" stroke-width="2"/><circle cx="18" cy="19" r="2.5" fill="none" stroke="#7dd3fc" stroke-width="2"/><path d="M6 8v8M18 16V9a3 3 0 0 0-3-3h-4" fill="none" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round"/></g>
     <text x="68" y="33" class="title">Pull requests</text>
     <text x="68" y="52" class="tier" fill="#7dd3fc">Platinum</text>
-    <text x="18" y="84" class="value">134<tspan class="unit"> opened</tspan></text>
+    <text x="18" y="84" class="value">135<tspan class="unit"> opened</tspan></text>
     <rect x="18" y="96" width="174" height="6" rx="3" fill="#1f2937"/>
-    <rect x="18" y="96" width="14" height="6" rx="3" fill="#7dd3fc"/>
+    <rect x="18" y="96" width="15" height="6" rx="3" fill="#7dd3fc"/>
     <text x="18" y="120" class="goal">next tier at 500</text>
   </g>
   <g transform="translate(456 52)">
