@@ -44,11 +44,35 @@
     },
     {
       "repo": "archetype",
-      "role": "hexagonal project template"
+      "role": "hexagonal project template",
+      "state": "ready"
     },
     {
       "repo": "pricelab-core",
-      "role": "pricing platform core"
+      "role": "pricing platform core",
+      "state": "idle"
+    },
+    {
+      "repo": "pricelab-retriever",
+      "role": "pricing data retrieval",
+      "state": "idle"
+    },
+    {
+      "repo": "pricelabcpp-core",
+      "role": "pricelab core in C++",
+      "lang": "C++",
+      "state": "idle"
+    },
+    {
+      "repo": "pricelabr-core",
+      "role": "pricelab core in Rust (exp.)",
+      "lang": "Rust",
+      "state": "idle"
+    },
+    {
+      "repo": "blender",
+      "role": "Blender experiments",
+      "state": "idle"
     }
   ],
   "cluster": {

@@ -95,7 +95,9 @@ def hero(config: dict, repositories: list[dict]) -> str:
          gap=20, pause=.15, attrs=f' fill="{FAINT}" font-size="12" letter-spacing=".08em"')
     for index, (item, repo) in enumerate(rows):
         days = ago(repo["pushed_at"])
-        state, color = ("ready", OK) if days <= 14 else ("idle", WARN) if days <= 90 else ("dormant", FAINT)
+        # a state set in profile.json wins; otherwise it comes from the last push
+        state = item.get("state") or ("ready" if days <= 14 else "idle" if days <= 90 else "dormant")
+        color = {"ready": OK, "idle": WARN}.get(state, FAINT)
         led = (f'<circle class="led" style="animation-delay:{index * .3:.1f}s" cx="30" cy="{y - 5}" r="4" fill="{color}"/>'
                if state == "ready" else f'<circle cx="30" cy="{y - 5}" r="4" fill="none" stroke="{color}" stroke-width="1.6"/>')
         when = "today" if days == 0 else f"{days}d ago"

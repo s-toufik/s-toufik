@@ -56,9 +56,12 @@
 **pricelab**
 - [pricelab-core](https://github.com/s-toufik/pricelab-core): core library of the pricing platform
 - [pricelab-retriever](https://github.com/s-toufik/pricelab-retriever): retrieves data from various sources
+- [pricelabcpp-core](https://github.com/s-toufik/pricelabcpp-core): the pricelab core in C++
+- [pricelabr-core](https://github.com/s-toufik/pricelabr-core): the shared core of the pricelab microservices in Rust (experimental)
 
 **Experiments**
 - [web_framework_benchmark](https://github.com/s-toufik/web_framework_benchmark): every web framework under the same load, compared
+- [blender](https://github.com/s-toufik/blender): Blender experiments
 
 ## Stack
 
