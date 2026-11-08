@@ -29,6 +29,11 @@
       "role": "every stack, one server"
     },
     {
+      "repo": "nexus",
+      "role": "knowledge hub · obsidian",
+      "lang": "Markdown"
+    },
+    {
       "repo": "kube-charts",
       "role": "charts the lab runs on",
       "lang": "Helm"
@@ -80,6 +85,20 @@
       "otel-collector",
       "tempo",
       "grafana"
+    ]
+  },
+  "nexus": {
+    "repo": "nexus",
+    "groups": [
+      "Projects",
+      "Knowledge",
+      "Paths",
+      "Sources",
+      "Log",
+      "System"
+    ],
+    "hide_from_graph": [
+      "System/Templates/"
     ]
   }
 }

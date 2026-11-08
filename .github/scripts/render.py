@@ -6,10 +6,13 @@ Each step is timed and logged. A step that fails keeps the card committed by the
 previous run instead of failing the whole job.
 """
 
+import io
 import json
+import math
 import os
 import re
 import sys
+import tarfile
 import time
 import traceback
 from contextlib import contextmanager
@@ -19,7 +22,7 @@ from pathlib import Path
 
 import achievements
 import cards
-from github_api import get_file, owned_repositories
+from github_api import get_file, get_tarball, owned_repositories
 
 MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 INK, BOX, RAISE, LINE, SOFT = "#0a0f1a", "#0d1117", "#111827", "#243044", "#1a2333"
@@ -127,6 +130,141 @@ def hero(config: dict, repositories: list[dict]) -> str:
   <text x="{width // 2}" y="23" text-anchor="middle" font-family="{MONO}" font-size="12" fill="{FAINT}">toufik@homelab: ~ — ssh over tailscale</text>
   <g font-family="{MONO}" font-size="14">
     {"".join(out)}
+  </g>
+</svg>
+"""
+
+
+# --- nexus: the knowledge hub as a graph ----------------------------------------------------
+
+NEXUS_COLORS = {"Projects": BLUE, "Knowledge": "#a78bfa", "Paths": "#34d399", "Sources": "#fbbf24",
+                "Log": "#f472b6", "System": MUTED}
+WIKILINK = re.compile(r"\[\[([^\]|#]+)")
+
+
+def vault(archive: bytes) -> dict[str, str]:
+    """Markdown notes of an Obsidian vault tarball, keyed by path inside the vault."""
+    notes = {}
+    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+        for member in tar.getmembers():
+            path = member.name.split("/", 1)[-1]  # drop the "<owner>-<repo>-<sha>/" prefix
+            if not member.isfile() or not path.endswith(".md") or any(part.startswith(".") for part in path.split("/")):
+                continue
+            notes[path] = tar.extractfile(member).read().decode("utf-8", "replace")
+    return notes
+
+
+def nexus(config: dict, notes: dict[str, str], repo: dict | None) -> str:
+    settings = config["nexus"]
+    groups = settings["groups"]
+    hidden = tuple(settings.get("hide_from_graph", []))
+    by_title = {path.rsplit("/", 1)[-1][:-3].lower(): path for path in notes}
+
+    # the graph: every note but the repository README and the templates, linked by [[wikilinks]]
+    nodes = [path for path in notes if path != "README.md" and not path.startswith(hidden)]
+    edges = set()
+    for path in nodes:
+        for target in WIKILINK.findall(notes[path]):
+            other = by_title.get(target.strip().rsplit("/", 1)[-1].lower())
+            if other in nodes and other != path:
+                edges.add(tuple(sorted((path, other))))
+    degree = {path: 0 for path in nodes}
+    for a, b in edges:
+        degree[a] += 1
+        degree[b] += 1
+
+    gx, gy, rx, ry = 570, 205, 178, 108
+    position, group_label = {}, []
+    present = [g for g in groups if any(p.startswith(g + "/") for p in nodes)]
+    # biggest folders take the roomy left and right slots, the small ones go above and below
+    slots = [180, 0, -52, 128, 52, -128, 90, -90]
+    by_size = sorted(present, key=lambda g: -sum(1 for p in nodes if p.startswith(g + "/")))
+    for group, slot in zip(by_size, slots):
+        angle = math.radians(slot)
+        cx, cy = gx + rx * math.cos(angle), gy + ry * math.sin(angle)
+        members = sorted((p for p in nodes if p.startswith(group + "/")),
+                         key=lambda p: (p != f"{group}/{group}.md", -degree[p], p))
+        for i, path in enumerate(members):  # sunflower around the folder's own index note
+            r, a = 10.5 * math.sqrt(i), i * 2.39996
+            position[path] = (cx + r * math.cos(a), cy + r * math.sin(a))
+        spread = 10.5 * math.sqrt(max(0, len(members) - 1)) + 8
+        group_label.append(f'<text x="{cx:.0f}" y="{cy - spread - 6:.0f}" text-anchor="middle" font-size="11.5" stroke="{INK}" stroke-width="4" paint-order="stroke" '
+                           f'fill="{NEXUS_COLORS.get(group, MUTED)}">{escape(group)}</text>')
+    for path in nodes:
+        position.setdefault(path, (gx, gy))  # Home.md and other top-level notes sit in the middle
+
+    def color(path: str) -> str:
+        return NEXUS_COLORS.get(path.split("/", 1)[0], FG) if "/" in path else FG
+
+    def curve(a: str, b: str) -> str:
+        (x1, y1), (x2, y2) = position[a], position[b]
+        mx, my, dx, dy = (x1 + x2) / 2, (y1 + y2) / 2, x2 - x1, y2 - y1
+        length = math.hypot(dx, dy) or 1
+        bend = (sum(map(ord, a + b)) % 41 - 20) / 20 * min(46, length * .22)  # stable per edge, fans a bundle out
+        cx, cy = mx - dy / length * bend, my + dx / length * bend
+        return (f'<path d="M{x1:.1f} {y1:.1f} Q{cx:.1f} {cy:.1f} {x2:.1f} {y2:.1f}" fill="none" '
+                f'stroke="{color(a) if "/" in a else color(b)}" stroke-opacity=".2" stroke-width="1"/>')
+
+    lines = "".join(curve(a, b) for a, b in sorted(edges))
+    dots = []
+    for index, path in enumerate(sorted(nodes, key=lambda p: degree[p])):
+        x, y = position[path]
+        r = 2.6 + min(5.0, degree[path] * .45)
+        hub = degree[path] >= 6
+        cls = "node hub" if hub else "node"
+        dots.append(f'<circle class="{cls}" style="animation-delay:{.3 + index * .025:.2f}s" cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{color(path)}"/>')
+    home = next((p for p in nodes if "/" not in p), None)
+    home_label = (f'<text x="{gx}" y="{gy + 22}" text-anchor="middle" font-size="11.5" fill="{FG}" stroke="{INK}" stroke-width="4" paint-order="stroke">{escape(home[:-3])}</text>' if home else "")
+
+    # the tree: every folder and its subfolders with their note counts
+    def count(prefix: str) -> int:
+        return sum(1 for path in notes if path.startswith(prefix))
+    tree = [f'<tspan fill="{FG}">nexus</tspan>']
+    top = [g for g in groups if count(g + "/")] 
+    for i, group in enumerate(top):
+        last = i == len(top) - 1
+        tree.append(f'<tspan fill="{FAINT}">{"└──" if last else "├──"} </tspan><tspan fill="{NEXUS_COLORS.get(group, MUTED)}">{escape(group)}</tspan>'
+                    f'<tspan x="270" text-anchor="end" fill="{MUTED}">{count(group + "/")}</tspan>')
+        subs = sorted({p.split("/")[1] for p in notes if p.startswith(group + "/") and p.count("/") >= 2})
+        for j, sub in enumerate(subs):
+            branch = "    " if last else "│   "
+            tree.append(f'<tspan fill="{FAINT}">{branch}{"└──" if j == len(subs) - 1 else "├──"} </tspan><tspan fill="{MUTED}">{escape(sub)}</tspan>'
+                        f'<tspan x="270" text-anchor="end" fill="{FAINT}">{count(f"{group}/{sub}/")}</tspan>')
+    tree_svg = "".join(
+        f'<text x="24" y="{100 + i * 19}" xml:space="preserve" class="row" style="animation-delay:{.15 + i * .05:.2f}s">{line}</text>'
+        for i, line in enumerate(tree)
+    )
+    total_notes = len(notes) - (1 if "README.md" in notes else 0)
+    updated = f" · updated {ago(repo['pushed_at'])}d ago" if repo and ago(repo["pushed_at"]) else " · updated today" if repo else ""
+    width = 840
+    height = max(392, 100 + len(tree) * 19 + 56)
+    footer_y = height - 22
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Nexus, my knowledge hub: {total_notes} notes and {len(edges)} links across {', '.join(top)}, drawn as a graph of linked notes">
+  <style>
+    .row {{ animation: reveal .01s steps(1) backwards; }}
+    @keyframes reveal {{ from {{ opacity: 0; }} }}
+    .node {{ transform-box: fill-box; transform-origin: center; animation: pop .5s cubic-bezier(.2,.9,.3,1.4) backwards; }}
+    @keyframes pop {{ from {{ transform: scale(0); }} }}
+    .hub {{ animation: pop .5s cubic-bezier(.2,.9,.3,1.4) backwards, glow 3s ease-in-out 1.5s infinite; }}
+    @keyframes glow {{ 50% {{ opacity: .55; }} }}
+    .edges {{ animation: fade 1.2s ease-out .6s backwards; }}
+    @keyframes fade {{ from {{ opacity: 0; }} }}
+    @media (prefers-reduced-motion: reduce) {{ .row, .node, .hub, .edges {{ animation: none; }} }}
+  </style>
+  <g font-family="{MONO}">
+    <rect x=".5" y=".5" width="{width - 1}" height="{height - 1}" rx="12" fill="{INK}" stroke="{LINE}"/>
+    <path d="M.5 36.5V12.5A12 12 0 0 1 12.5 .5h815a12 12 0 0 1 12 12v24z" fill="{RAISE}"/>
+    <circle cx="22" cy="18" r="6" fill="#f87171" fill-opacity=".8"/><circle cx="42" cy="18" r="6" fill="#fbbf24" fill-opacity=".8"/><circle cx="62" cy="18" r="6" fill="#34d399" fill-opacity=".8"/>
+    <text x="{width // 2}" y="23" text-anchor="middle" font-size="12" fill="{FAINT}">nexus — knowledge hub · obsidian vault</text>
+    <text x="24" y="70" font-size="14"><tspan fill="{BLUE}">toufik@homelab</tspan><tspan fill="{FAINT}">:~$ </tspan><tspan fill="{FG}">tree nexus -d</tspan></text>
+    <g font-size="13">{tree_svg}</g>
+    <line x1="300" y1="52" x2="300" y2="{height - 44}" stroke="{SOFT}"/>
+    <g class="edges">{lines}</g>
+    {"".join(dots)}
+    {home_label}
+    {"".join(group_label)}
+    <text x="24" y="{footer_y}" font-size="11.5" fill="{FAINT}">{total_notes} notes · {len(edges)} links{updated}</text>
+    <text x="{width - 20}" y="{footer_y}" text-anchor="end" font-size="11.5" fill="{FAINT}">one dot per note · sized by its links</text>
   </g>
 </svg>
 """
@@ -255,6 +393,13 @@ def main() -> None:
         with span("github.helmfile"):
             settings = config["cluster"]
             found = releases(get_file(f"{login}/{settings['repo']}", settings["helmfile"], token))
+        notes: dict[str, str] = {}
+        with span("github.nexus"):
+            notes = vault(get_tarball(f"{login}/{config['nexus']['repo']}", token))
+        if notes:
+            with span("render.nexus", len(notes)):
+                repo = next((r for r in repositories if r["name"].lower() == config["nexus"]["repo"].lower()), None)
+                write(output / "nexus.svg", nexus(config, notes, repo))
         if repositories:
             with span("render.hero"):
                 write(output / "hero.svg", hero(config, repositories))

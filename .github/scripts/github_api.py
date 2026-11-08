@@ -52,3 +52,12 @@ def owned_repositories(login: str, token: str | None) -> list[dict]:
         if len(batch) < 100:
             return repositories
         page += 1
+
+
+def get_tarball(repo: str, token: str | None) -> bytes:
+    """The default branch as a .tar.gz: one request, however many files the repository holds."""
+    request = urllib.request.Request(f"{API}/repos/{repo}/tarball", headers={"User-Agent": USER_AGENT})
+    if token:
+        request.add_header("Authorization", f"Bearer {token}")
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()

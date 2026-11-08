@@ -27,6 +27,14 @@
   <a href="https://github.com/s-toufik/homelab-infra"><img src="cards/cluster.svg" width="100%" alt="Every Helm release on the homelab-infra k3s node, grouped by namespace, with the path of one question through the cluster" /></a>
 </div>
 
+## Nexus, my knowledge hub
+
+**[nexus](https://github.com/s-toufik/nexus)** is where I write down everything I build, why it's built that way, and the ideas behind it, so it can be learned from. It's an Obsidian vault: one note per idea, linked rather than repeated, with decisions that keep their reasons. The graph below is drawn from the vault every day: one dot per note, linked the way the notes link each other.
+
+<div align="center">
+  <a href="https://github.com/s-toufik/nexus"><img src="cards/nexus.svg" width="100%" alt="Nexus: the folders of my knowledge hub with their note counts, and a graph of every note and its links" /></a>
+</div>
+
 ## Repositories
 
 **Agents**
@@ -37,6 +45,9 @@
 - [homelab-ui](https://github.com/s-toufik/homelab-ui): the front door, with every tool as a page and the agent beside it
 - [homelab-infra](https://github.com/s-toufik/homelab-infra): the whole platform on one k3s node, deployed with helmfile
 - [kube-charts](https://github.com/s-toufik/kube-charts): the Helm charts the homelab runs on
+
+**Knowledge**
+- [nexus](https://github.com/s-toufik/nexus): my knowledge hub, an Obsidian vault of projects, ideas, learning paths and sources
 
 **Libraries and templates**
 - [pycraftcore](https://github.com/s-toufik/pycraftcore): reusable infrastructure and adapters for Python applications
