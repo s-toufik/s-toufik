@@ -1,18 +1,9 @@
-"""Render the profile cards (project pins, languages, contribution streak) as static SVGs.
+"""Shared SVG helpers plus the languages and contribution streak cards. render.py drives them."""
 
-Usage: cards.py <login> <output-dir> <repo> [<repo> ...]
-
-The streak card needs a token (GitHub's GraphQL API refuses anonymous calls);
-without one it is skipped and the previously committed card is kept.
-"""
-
-import os
-import sys
 from datetime import UTC, date, datetime
 from html import escape
-from pathlib import Path
 
-from github_api import get, graphql, owned_repositories
+from github_api import get, graphql
 
 FONT = '-apple-system, "Segoe UI", Helvetica, Arial, sans-serif'
 BG, BORDER, TEXT, MUTED, ACCENT = "#0d1117", "#30363d", "#e6edf3", "#8b949e", "#60a5fa"
@@ -29,20 +20,6 @@ LANGUAGE_COLORS = {
 }
 OTHER = "#8b949e"
 
-REPO_ICON = (
-    '<path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 '
-    '0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 '
-    '0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/>'
-)
-STAR_ICON = (
-    '<path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 '
-    '12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/>'
-)
-FORK_ICON = (
-    '<path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 '
-    '2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 '
-    '0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/>'
-)
 
 
 def svg(width: int, height: int, label: str, body: str, extra_style: str = "") -> str:
@@ -57,73 +34,17 @@ def svg(width: int, height: int, label: str, body: str, extra_style: str = "") -
 """
 
 
-def wrap(text: str, width: int, lines: int) -> list[str]:
-    words, out, current = text.split(), [], ""
-    for word in words:
-        candidate = f"{current} {word}".strip()
-        if len(candidate) <= width:
-            current = candidate
-            continue
-        out.append(current)
-        current = word
-        if len(out) == lines:
-            break
-    else:
-        if current:
-            out.append(current)
-        return out
-    last = out[-1]
-    return out[:-1] + [(last[: width - 1].rstrip() + "…") if len(last) >= width - 1 else last + "…"]
-
-
-def human_date(value: str) -> str:
-    moment = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    return f"{moment:%b} {moment.day}, {moment.year}"
-
-
-# --- project pin -----------------------------------------------------------------------------
-
-
-def pin_card(repo: dict) -> str:
-    width, height = 440, 140
-    description = repo["description"] or "No description yet."
-    lines = wrap(description, 62, 2)
-    language = repo["language"]
-    footer, x = [], 20
-    if language:
-        color = LANGUAGE_COLORS.get(language, OTHER)
-        footer.append(f'<circle cx="{x + 6}" cy="114" r="6" fill="{color}"/>'
-                      f'<text x="{x + 18}" y="118" class="muted">{escape(language)}</text>')
-        x += 30 + int(len(language) * 7)
-    footer.append(f'<g transform="translate({x} 106)" fill="{MUTED}">{STAR_ICON}</g>'
-                  f'<text x="{x + 21}" y="118" class="muted">{repo["stargazers_count"]:,}</text>')
-    x += 34 + len(f"{repo['stargazers_count']:,}") * 7
-    footer.append(f'<g transform="translate({x} 106)" fill="{MUTED}">{FORK_ICON}</g>'
-                  f'<text x="{x + 20}" y="118" class="muted">{repo["forks_count"]:,}</text>')
-    description_text = "".join(
-        f'<text x="20" y="{70 + index * 19}" class="desc">{escape(line)}</text>' for index, line in enumerate(lines)
-    )
-    body = f"""
-  <g transform="translate(20 22)" fill="{MUTED}">{REPO_ICON}</g>
-  <text x="44" y="35" class="name">{escape(repo["name"])}</text>
-  <text x="{width - 20}" y="35" text-anchor="end" class="pill">{"archived" if repo.get("archived") else "public"}</text>
-  {description_text}
-  {"".join(footer)}
-  <text x="{width - 20}" y="118" text-anchor="end" class="muted">updated {human_date(repo["pushed_at"])}</text>"""
-    style = f"""
-    .name {{ font-size: 16px; font-weight: 700; fill: {ACCENT}; }}
-    .desc {{ font-size: 13px; fill: {MUTED}; }}
-    .pill {{ font-size: 11px; fill: {MUTED}; letter-spacing: .5px; }}"""
-    return svg(width, height, f"{repo['name']}: {description}", body, style)
-
-
 # --- languages -------------------------------------------------------------------------------
+
+
+def counts_for_languages(repo: dict, login: str) -> bool:
+    return not (repo["archived"] or repo["name"].startswith("_") or repo["name"].lower() == login.lower())
 
 
 def language_totals(repositories: list[dict], login: str, token: str | None) -> dict[str, int]:
     totals: dict[str, int] = {}
     for repo in repositories:
-        if repo["archived"] or repo["name"].startswith("_") or repo["name"].lower() == login.lower():
+        if not counts_for_languages(repo, login):
             continue
         for language, size in get(f"/repos/{repo['full_name']}/languages", token).items():
             totals[language] = totals.get(language, 0) + size
@@ -229,32 +150,3 @@ def streak_card(days: list[tuple[date, int]], width: int = 440, height: int = 20
     .unit {{ font-size: 13px; font-weight: 400; fill: {MUTED}; }}"""
     label = f"{total} contributions in the last year, current streak {current} days, longest {longest} days"
     return svg(width, height, label, body, style)
-
-
-def main() -> None:
-    login, output, featured = sys.argv[1], Path(sys.argv[2]), sys.argv[3:]
-    token = os.environ.get("GITHUB_TOKEN") or None
-    output.mkdir(parents=True, exist_ok=True)
-
-    repositories = owned_repositories(login, token)
-    by_name = {repo["name"].lower(): repo for repo in repositories}
-    for name in featured:
-        repo = by_name.get(name.lower())
-        if repo is None:
-            print(f"skip pin {name}: repository not found or not public", file=sys.stderr)
-            continue
-        (output / f"repo-{repo['name']}.svg").write_text(pin_card(repo), encoding="utf-8")
-        print(f"pin       {repo['name']}")
-
-    (output / "languages.svg").write_text(languages_card(language_totals(repositories, login, token)), encoding="utf-8")
-    print("languages ok")
-
-    if token:
-        (output / "streak.svg").write_text(streak_card(contribution_days(login, token)), encoding="utf-8")
-        print("streak    ok")
-    else:
-        print("streak    skipped: set GITHUB_TOKEN to render it", file=sys.stderr)
-
-
-if __name__ == "__main__":
-    main()

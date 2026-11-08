@@ -1,40 +1,52 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:070b16,55:1d4ed8,100:38bdf8&height=190&section=header&text=s-toufik&fontColor=ffffff&fontSize=56&fontAlignY=36&desc=Building%20a%20homelab%20platform%2C%20one%20clean%20module%20at%20a%20time&descSize=17&descAlignY=58" width="100%" alt="s-toufik" />
+<a href="https://github.com/s-toufik?tab=repositories"><img src="cards/hero.svg" width="100%" alt="Terminal: Toufik Saouchi, software engineer. I build AI agents and the single-server platform they run on. Status of each project." /></a>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=18&duration=3800&pause=1600&color=8B949E&center=true&vCenter=true&width=760&lines=Designing+software+that+stays+maintainable+as+it+grows;Agentic+AI%3A+explicit+routing%2C+tool+use+and+self-review;Self-hosted+platform%3A+observability%2C+data+and+LLMs+end+to+end;Hexagonal+architecture+%C2%B7+typed+Python+%C2%B7+tested+boundaries" alt="Focus areas" />
-
-<p>
-  <a href="https://github.com/s-toufik?tab=repositories"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2Fs-toufik&query=%24.public_repos&label=open%20source&suffix=%20public%20repos&style=flat-square&color=1d4ed8&logo=opensourceinitiative&logoColor=white" alt="Open source: public repositories" /></a>
-  <a href="https://github.com/s-toufik/homelab-infra"><img src="https://img.shields.io/badge/focus-agentic%20systems%20%C2%B7%20finance%20%C2%B7%20scientific%20computing-0ea5e9?style=flat-square&logo=jupyter&logoColor=white" alt="Focus: agentic systems, finance and scientific computing" /></a>
-</p>
+<sub>
+<a href="https://github.com/s-toufik/agent-runtime">agent-runtime</a> ·
+<a href="https://github.com/s-toufik/agent-toolbox">agent-toolbox</a> ·
+<a href="https://github.com/s-toufik/homelab-ui">homelab-ui</a> ·
+<a href="https://github.com/s-toufik/homelab-infra">homelab-infra</a> ·
+<a href="https://github.com/s-toufik/kube-charts">kube-charts</a> ·
+<a href="https://github.com/s-toufik/pycraftcore">pycraftcore</a> ·
+<a href="https://github.com/s-toufik/archetype">archetype</a> ·
+<a href="https://github.com/s-toufik/pricelab-core">pricelab-core</a>
+</sub>
 
 </div>
 
-## 👋 About me
+I build software the way I'd like to maintain it: **clear layers, small swappable parts, and tests that guard the architecture**. My playground is a homelab that grows into a real platform: an AI agent with its own MCP tools, local language models, databases, Kafka and full observability, all on one k3s node behind a single sign-in.
 
-I build software the way I'd like to maintain it: **clear layers, small swappable parts, and tests that guard the architecture**. My playground is a homelab that grows into a real platform — an AI agent with its own tools, local language models, full observability and data services, all on a single machine.
+## The lab, from the front door to the pods
 
-- 🧠 Designing **AI agents**: planning, tool use over MCP, self-review, routing driven by explicit rules
-- 📈 Running my own **observability stack**: metrics, logs and traces end to end
-- 🌱 Always adding the next piece — the repositories below keep growing
+**[homelab-ui](https://github.com/s-toufik/homelab-ui)** is the front door: every tool rebuilt as a page, a Status page, and the agent beside every page.
 
-## 📊 GitHub stats
+<div align="center">
+  <img src="assets/homelab-ui.svg" width="100%" alt="Sketch of homelab-ui: sidebar with every tool as a page, the Status page by namespace, and the agent panel" />
+</div>
+
+Behind it, **[homelab-infra](https://github.com/s-toufik/homelab-infra)** deploys every release with helmfile and the charts from **[kube-charts](https://github.com/s-toufik/kube-charts)**. The map below is read from that helmfile every day. The numbered pods light up in turn to follow one question, from sign-in to the model, and then its trace lands in Tempo.
+
+<div align="center">
+  <img src="cards/cluster.svg" width="100%" alt="Every Helm release on the k3s node, grouped by namespace, with the path of one question through the cluster" />
+</div>
+
+## This page renders itself
+
+A daily GitHub Action draws every card on this page. It times each step it runs and draws them as a trace, the same way Tempo shows a request.
+
+<div align="center">
+  <img src="cards/trace.svg" width="100%" alt="Trace of the last run that rendered this profile" />
+</div>
+
+## Activity
 
 <div align="center">
   <img src="cards/streak.svg" width="49%" alt="Contributions in the last 12 months and current streak" />
   <img src="cards/languages.svg" width="49%" alt="Most used languages across my repositories" />
-</div>
-
-## 🏆 Achievements
-
-<div align="center">
-  <img src="metrics.achievements.svg" alt="Achievements earned on GitHub" />
-</div>
-
-## 📅 A year of contributions
-
-<div align="center">
+  <br /><br />
+  <img src="cards/achievements.svg" width="100%" alt="Achievements earned on GitHub" />
+  <br /><br />
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake-dark.svg" />
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/s-toufik/s-toufik/output/github-snake.svg" />
@@ -42,54 +54,9 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
   </picture>
 </div>
 
-## 🛰️ The homelab platform
-
-**homelab-ui** is where I control, present and check everything. **homelab-infra** is my server: every stack runs there with Docker Compose. My own applications live on the same server — released as libraries on PyPI and images on Docker Hub — and each one gets its page in the UI as it arrives.
-
-<div align="center">
-  <img src="homelab-platform.svg" width="100%" alt="Platform overview: homelab-ui for control, presentation and health checks, on top of homelab-infra, a single server running the applications and the platform stacks with Docker Compose; releases go through PyPI and Docker Hub" />
-</div>
-
-## 🚀 Featured projects
-
-<table>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/agent-runtime"><img src="cards/repo-agent-runtime.svg" width="100%" alt="agent-runtime" /></a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/agent-toolbox"><img src="cards/repo-agent-toolbox.svg" width="100%" alt="agent-toolbox" /></a>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/homelab-ui"><img src="cards/repo-homelab-ui.svg" width="100%" alt="homelab-ui" /></a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/homelab-infra"><img src="cards/repo-homelab-infra.svg" width="100%" alt="homelab-infra" /></a>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/kube-charts"><img src="cards/repo-kube-charts.svg" width="100%" alt="kube-charts" /></a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/pycraftcore"><img src="cards/repo-pycraftcore.svg" width="100%" alt="pycraftcore" /></a>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/archetype"><img src="cards/repo-archetype.svg" width="100%" alt="archetype" /></a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/web_framework_benchmark"><img src="cards/repo-web_framework_benchmark.svg" width="100%" alt="web_framework_benchmark" /></a>
-    </td>
-  </tr>
-</table>
-
 Also building the **pricelab** platform: [pricelab-core](https://github.com/s-toufik/pricelab-core) · [pricelab-retriever](https://github.com/s-toufik/pricelab-retriever)
 
-## 🧰 Tech stack
+## Stack
 
 **Languages**
 <br />
@@ -125,5 +92,6 @@ Also building the **pricelab** platform: [pricelab-core](https://github.com/s-to
 <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus" />
 <img src="https://img.shields.io/badge/OpenTelemetry-425CC7?style=for-the-badge&logo=opentelemetry&logoColor=white" alt="OpenTelemetry" />
 <img src="https://img.shields.io/badge/Tailscale-242424?style=for-the-badge&logo=tailscale&logoColor=white" alt="Tailscale" />
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:38bdf8,45:1d4ed8,100:070b16&height=110&section=footer" width="100%" alt="" />
+<img src="https://img.shields.io/badge/k3s-FFC61C?style=for-the-badge&logo=k3s&logoColor=black" alt="k3s" />
+<img src="https://img.shields.io/badge/Caddy-1F88C0?style=for-the-badge&logo=caddy&logoColor=white" alt="Caddy" />
+<img src="https://img.shields.io/badge/Keycloak-4D4D4D?style=for-the-badge&logo=keycloak&logoColor=white" alt="Keycloak" />

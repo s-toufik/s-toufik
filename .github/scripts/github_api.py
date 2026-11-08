@@ -20,6 +20,17 @@ def get(path: str, token: str | None) -> dict | list:
     return _request(f"{API}{path}", token)
 
 
+def get_file(repo: str, path: str, token: str | None) -> str:
+    request = urllib.request.Request(
+        f"{API}/repos/{repo}/contents/{urllib.parse.quote(path)}",
+        headers={"Accept": "application/vnd.github.raw", "User-Agent": USER_AGENT},
+    )
+    if token:
+        request.add_header("Authorization", f"Bearer {token}")
+    with urllib.request.urlopen(request, timeout=30) as response:
+        return response.read().decode()
+
+
 def graphql(query: str, variables: dict, token: str) -> dict:
     payload = json.dumps({"query": query, "variables": variables}).encode()
     result = _request(f"{API}/graphql", token, payload)

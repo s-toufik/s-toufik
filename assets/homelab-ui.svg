@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="380" viewBox="0 0 840 380" role="img" aria-label="Sketch of homelab-ui: sidebar with every tool as a page, the Status page with each namespace's releases, and the agent panel beside it">
+  <style>
+    .led { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 50% { opacity: .35; } }
+    .msg { animation: in .4s ease-out backwards; }
+    @keyframes in { from { opacity: 0; transform: translateY(6px); } }
+    @media (prefers-reduced-motion: reduce) { .led, .msg { animation: none; } }
+  </style>
+  <g font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
+    <rect x=".5" y=".5" width="839" height="379" rx="12" fill="#0a0f1a" stroke="#243044"/>
+    <rect x=".5" y=".5" width="839" height="34" rx="12" fill="#111827"/><rect x=".5" y="22" width="839" height="13" fill="#111827"/>
+    <circle cx="22" cy="17" r="5.5" fill="#f87171" fill-opacity=".8"/><circle cx="40" cy="17" r="5.5" fill="#fbbf24" fill-opacity=".8"/><circle cx="58" cy="17" r="5.5" fill="#34d399" fill-opacity=".8"/>
+    <rect x="250" y="8" width="340" height="19" rx="9.5" fill="#0a0f1a" stroke="#1a2333"/>
+    <text x="420" y="21.5" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#8b98ab">https://homelab.tailnet/status</text>
+    <!-- sidebar -->
+    <rect x="1" y="35" width="150" height="344" fill="#0d1117"/>
+    <line x1="151" y1="35" x2="151" y2="379" stroke="#1a2333"/>
+    <text x="18" y="62" font-size="13" font-weight="700" fill="#e6edf3">homelab</text>
+    <g font-size="12" fill="#8b98ab">
+      <text x="18" y="92">Control center</text>
+      <rect x="10" y="102" width="132" height="24" rx="6" fill="#1d4ed8" fill-opacity=".22"/><text x="18" y="118" fill="#60a5fa" font-weight="600">Status</text>
+      <text x="18" y="144">Dashboards</text><text x="18" y="166">Metrics</text><text x="18" y="188">Logs</text><text x="18" y="210">Traces</text>
+      <text x="18" y="232">Kafka</text><text x="18" y="254">Models</text><text x="18" y="276">Tools</text><text x="18" y="298">Kubernetes</text><text x="18" y="320">Tasker</text><text x="18" y="342">Account</text>
+    </g>
+    <!-- main -->
+    <text x="172" y="66" font-size="18" font-weight="700" fill="#e6edf3">Status</text>
+    <text x="172" y="86" font-size="12" fill="#8b98ab">every release on the server, checked continuously</text>
+    <rect x="460" y="52" width="110" height="24" rx="12" fill="#3fb950" fill-opacity=".14" stroke="#3fb950" stroke-opacity=".5"/>
+    <circle class="led" cx="476" cy="64" r="4" fill="#3fb950"/><text x="486" y="68" font-size="11.5" fill="#3fb950" font-weight="600">all healthy</text>
+    <g font-size="12">
+      <g transform="translate(172 102)"><rect width="190" height="74" rx="9" fill="#111827" stroke="#1f2937"/><text x="14" y="24" fill="#e6edf3" font-weight="600">Gateway</text><text x="14" y="44" fill="#8b98ab">caddy · keycloak · oauth2</text><text x="14" y="62" fill="#3fb950">5 / 5 ready</text></g>
+      <g transform="translate(374 102)"><rect width="190" height="74" rx="9" fill="#111827" stroke="#1f2937"/><text x="14" y="24" fill="#e6edf3" font-weight="600">Apps</text><text x="14" y="44" fill="#8b98ab">ui · agent · toolbox</text><text x="14" y="62" fill="#3fb950">3 / 3 ready</text></g>
+      <g transform="translate(172 186)"><rect width="190" height="74" rx="9" fill="#111827" stroke="#1f2937"/><text x="14" y="24" fill="#e6edf3" font-weight="600">LLM</text><text x="14" y="44" fill="#8b98ab">llama-swap · 3 MCP servers</text><text x="14" y="62" fill="#3fb950">6 / 6 ready</text></g>
+      <g transform="translate(374 186)"><rect width="190" height="74" rx="9" fill="#111827" stroke="#1f2937"/><text x="14" y="24" fill="#e6edf3" font-weight="600">Repository</text><text x="14" y="44" fill="#8b98ab">postgres · mongodb · postgrest</text><text x="14" y="62" fill="#3fb950">3 / 3 ready</text></g>
+      <g transform="translate(172 270)"><rect width="190" height="74" rx="9" fill="#111827" stroke="#1f2937"/><text x="14" y="24" fill="#e6edf3" font-weight="600">Observability</text><text x="14" y="44" fill="#8b98ab">otel · prometheus · tempo</text><text x="14" y="62" fill="#3fb950">8 / 8 ready</text></g>
+      <g transform="translate(374 270)"><rect width="190" height="74" rx="9" fill="#111827" stroke="#1f2937"/><text x="14" y="24" fill="#e6edf3" font-weight="600">Broker · Platform</text><text x="14" y="44" fill="#8b98ab">kafka · cnpg · reloader</text><text x="14" y="62" fill="#3fb950">4 / 4 ready</text></g>
+    </g>
+    <!-- agent panel -->
+    <rect x="584" y="35" width="255" height="344" fill="#0d1117"/>
+    <line x1="584" y1="35" x2="584" y2="379" stroke="#1a2333"/>
+    <text x="600" y="62" font-size="13" font-weight="700" fill="#e6edf3">Agent</text>
+    <text x="823" y="62" font-size="11" fill="#5b6779" text-anchor="end">beside every page</text>
+    <g font-size="12">
+      <g class="msg" style="animation-delay:.6s"><rect x="660" y="80" width="164" height="44" rx="10" fill="#1d4ed8"/><text x="672" y="98" fill="#ffffff">Anything slow on the</text><text x="672" y="114" fill="#ffffff">server today?</text></g>
+      <g class="msg" style="animation-delay:1.4s" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5"><rect x="600" y="136" width="224" height="50" rx="8" fill="#111827" stroke="#1f2937"/><text x="612" y="156" fill="#38bdf8">→ grafana_query_prometheus</text><text x="612" y="174" fill="#38bdf8">→ grafana_search_traces</text></g>
+      <g class="msg" style="animation-delay:2.2s"><rect x="600" y="198" width="224" height="78" rx="10" fill="#111827"/><text x="612" y="218" fill="#e6edf3">All 31 releases are ready.</text><text x="612" y="236" fill="#8b98ab">The slowest traces are model</text><text x="612" y="254" fill="#8b98ab">calls in llama-swap. Want the</text><text x="612" y="268" fill="#8b98ab">trace view?</text></g>
+      <rect x="600" y="336" width="224" height="30" rx="15" fill="#0a0f1a" stroke="#243044"/><text x="616" y="355" fill="#5b6779">Ask about the homelab…</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+{
+  "name": "Toufik Saouchi · software engineer",
+  "tagline": "I build AI agents and the single-server platform they run on.",
+  "featured": [
+    { "repo": "agent-runtime", "role": "plans · acts · self-reviews" },
+    { "repo": "agent-toolbox", "role": "MCP tool server" },
+    { "repo": "homelab-ui", "role": "control · health checks" },
+    { "repo": "homelab-infra", "role": "every stack, one server" },
+    { "repo": "kube-charts", "role": "charts the lab runs on", "lang": "Helm" },
+    { "repo": "pycraftcore", "role": "shared adapters · PyPI" },
+    { "repo": "archetype", "role": "hexagonal project template" },
+    { "repo": "pricelab-core", "role": "pricing platform core" }
+  ],
+  "cluster": {
+    "repo": "homelab-infra",
+    "helmfile": "helmfile.yaml.gotmpl",
+    "groups": ["gateway", "apps", "llm", "repository", "observability", "message-broker", "platform"],
+    "rename": { "cnpg": "cnpg-operator", "llm": "llama-swap", "postgres": "postgres (cnpg)" },
+    "kinds": { "backups": "cron", "db-migrate": "job" },
+    "hops": ["caddy", "oauth2-proxy", "homelab-ui", "agent-runtime", "agent-toolbox", "postgres-mcp", "llm"],
+    "telemetry": ["otel-collector", "tempo", "grafana"]
+  }
+}
