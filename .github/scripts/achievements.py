@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from html import escape
 
-from github_api import get, search_count
+from github_api import get, owned_repositories, search_count
 
 TIERS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond")
 TIER_COLORS = ("#cd7f32", "#c0c7d1", "#f5c542", "#7dd3fc", "#a78bfa")
@@ -58,17 +58,6 @@ class Achievement:
             return 1.0
         start = self.thresholds[self.tier] if self.tier >= 0 else 0
         return max(0.0, min(1.0, (self.value - start) / (nxt - start)))
-
-
-def owned_repositories(login: str, token: str | None) -> list[dict]:
-    repositories: list[dict] = []
-    page = 1
-    while True:
-        batch = get(f"/users/{login}/repos?type=owner&per_page=100&page={page}", token)
-        repositories += [repo for repo in batch if not repo["fork"]]
-        if len(batch) < 100:
-            return repositories
-        page += 1
 
 
 def collect(login: str, token: str | None) -> list[Achievement]:

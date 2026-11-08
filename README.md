@@ -22,10 +22,8 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 ## 📊 GitHub stats
 
 <div align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=s-toufik&show_icons=true&include_all_commits=true&count_private=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa&rank_icon=github" alt="GitHub stats" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=s-toufik&layout=compact&langs_count=8&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa" alt="Top languages" />
-  <br />
-  <img src="https://streak-stats.demolab.com?user=s-toufik&theme=github-dark-blue&hide_border=true&background=0D1117&ring=60A5FA&fire=38BDF8&currStreakLabel=60A5FA" alt="Contribution streak" />
+  <img src="cards/streak.svg" width="49%" alt="Contributions in the last 12 months and current streak" />
+  <img src="cards/languages.svg" width="49%" alt="Most used languages across my repositories" />
 </div>
 
 ## 🏆 Achievements
@@ -57,26 +55,34 @@ I build software the way I'd like to maintain it: **clear layers, small swappabl
 <table>
   <tr>
     <td width="50%">
-      <a href="https://github.com/s-toufik/agent-runtime"><img src="https://github-readme-stats.vercel.app/api/pin/?username=s-toufik&repo=agent-runtime&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa" alt="agent-runtime" /></a>
+      <a href="https://github.com/s-toufik/agent-runtime"><img src="cards/repo-agent-runtime.svg" width="100%" alt="agent-runtime" /></a>
     </td>
     <td width="50%">
-      <a href="https://github.com/s-toufik/agent-toolbox"><img src="https://github-readme-stats.vercel.app/api/pin/?username=s-toufik&repo=agent-toolbox&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa" alt="agent-toolbox" /></a>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/homelab-ui"><img src="https://github-readme-stats.vercel.app/api/pin/?username=s-toufik&repo=homelab-ui&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa" alt="homelab-ui" /></a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/s-toufik/homelab-infra"><img src="https://github-readme-stats.vercel.app/api/pin/?username=s-toufik&repo=homelab-infra&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa" alt="homelab-infra" /></a>
+      <a href="https://github.com/s-toufik/agent-toolbox"><img src="cards/repo-agent-toolbox.svg" width="100%" alt="agent-toolbox" /></a>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <a href="https://github.com/s-toufik/pycraftcore"><img src="https://github-readme-stats.vercel.app/api/pin/?username=s-toufik&repo=pycraftcore&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa" alt="pycraftcore" /></a>
+      <a href="https://github.com/s-toufik/homelab-ui"><img src="cards/repo-homelab-ui.svg" width="100%" alt="homelab-ui" /></a>
     </td>
     <td width="50%">
-      <a href="https://github.com/s-toufik/archetype"><img src="https://github-readme-stats.vercel.app/api/pin/?username=s-toufik&repo=archetype&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=60a5fa&icon_color=60a5fa" alt="archetype" /></a>
+      <a href="https://github.com/s-toufik/homelab-infra"><img src="cards/repo-homelab-infra.svg" width="100%" alt="homelab-infra" /></a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <a href="https://github.com/s-toufik/kube-charts"><img src="cards/repo-kube-charts.svg" width="100%" alt="kube-charts" /></a>
+    </td>
+    <td width="50%">
+      <a href="https://github.com/s-toufik/pycraftcore"><img src="cards/repo-pycraftcore.svg" width="100%" alt="pycraftcore" /></a>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <a href="https://github.com/s-toufik/archetype"><img src="cards/repo-archetype.svg" width="100%" alt="archetype" /></a>
+    </td>
+    <td width="50%">
+      <a href="https://github.com/s-toufik/web_framework_benchmark"><img src="cards/repo-web_framework_benchmark.svg" width="100%" alt="web_framework_benchmark" /></a>
     </td>
   </tr>
 </table>
@@ -110,6 +116,8 @@ Also building the **pricelab** platform: [pricelab-core](https://github.com/s-to
 **Data & infrastructure**
 <br />
 <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+<img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
+<img src="https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white" alt="Helm" />
 <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
 <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
 <img src="https://img.shields.io/badge/Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white" alt="Kafka" />

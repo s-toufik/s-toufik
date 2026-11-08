@@ -1,3 +1,4 @@
 __pycache__/
 *.pyc
 Makefile
+.DS_Store

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="200" viewBox="0 0 440 200" role="img" aria-label="Most used languages: Python, TypeScript, HTML, SCSS, Shell, Go Template, Makefile, Other">
+  <style>
+    text { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .heading { font-size: 16px; font-weight: 700; fill: #e6edf3; }
+    .muted { font-size: 12px; fill: #8b949e; }
+    .lang { font-size: 13px; fill: #e6edf3; }
+  </style>
+  <rect x="0.5" y="0.5" width="439" height="199" rx="14" fill="#0d1117" stroke="#30363d"/>
+  <text x="20" y="34" class="heading">Most used languages</text>
+  <clipPath id="bar"><rect x="20" y="56" width="400" height="10" rx="5"/></clipPath>
+  <g clip-path="url(#bar)"><rect x="20.00" y="56" width="270.83" height="10" fill="#3572A5"/><rect x="290.83" y="56" width="69.73" height="10" fill="#3178c6"/><rect x="360.56" y="56" width="22.27" height="10" fill="#e34c26"/><rect x="382.83" y="56" width="14.30" height="10" fill="#c6538c"/><rect x="397.13" y="56" width="9.20" height="10" fill="#89e051"/><rect x="406.34" y="56" width="8.66" height="10" fill="#00ADD8"/><rect x="415.00" y="56" width="3.69" height="10" fill="#427819"/><rect x="418.68" y="56" width="1.32" height="10" fill="#8b949e"/></g>
+  <circle cx="26" cy="94" r="6" fill="#3572A5"/><text x="40" y="98" class="lang">Python</text><text x="196" y="98" text-anchor="end" class="muted">67.7%</text><circle cx="226" cy="94" r="6" fill="#3178c6"/><text x="240" y="98" class="lang">TypeScript</text><text x="396" y="98" text-anchor="end" class="muted">17.4%</text><circle cx="26" cy="120" r="6" fill="#e34c26"/><text x="40" y="124" class="lang">HTML</text><text x="196" y="124" text-anchor="end" class="muted">5.6%</text><circle cx="226" cy="120" r="6" fill="#c6538c"/><text x="240" y="124" class="lang">SCSS</text><text x="396" y="124" text-anchor="end" class="muted">3.6%</text><circle cx="26" cy="146" r="6" fill="#89e051"/><text x="40" y="150" class="lang">Shell</text><text x="196" y="150" text-anchor="end" class="muted">2.3%</text><circle cx="226" cy="146" r="6" fill="#00ADD8"/><text x="240" y="150" class="lang">Go Template</text><text x="396" y="150" text-anchor="end" class="muted">2.2%</text><circle cx="26" cy="172" r="6" fill="#427819"/><text x="40" y="176" class="lang">Makefile</text><text x="196" y="176" text-anchor="end" class="muted">0.9%</text><circle cx="226" cy="172" r="6" fill="#8b949e"/><text x="240" y="176" class="lang">Other</text><text x="396" y="176" text-anchor="end" class="muted">0.3%</text>
+</svg>
