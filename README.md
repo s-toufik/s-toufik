@@ -1,34 +1,7 @@
 <div align="center">
 
-<a href="https://github.com/s-toufik?tab=repositories"><img src="cards/hero.svg" width="100%" alt="Terminal: Toufik Saouchi, software engineer. I build AI agents and the single-server platform they run on. Status of each project." /></a>
+<img src="cards/hero.svg" width="100%" alt="Terminal: Toufik Saouchi, software engineer. About me, then the status of each project." />
 
-<sub>
-<a href="https://github.com/s-toufik/agent-runtime">agent-runtime</a> ·
-<a href="https://github.com/s-toufik/agent-toolbox">agent-toolbox</a> ·
-<a href="https://github.com/s-toufik/homelab-ui">homelab-ui</a> ·
-<a href="https://github.com/s-toufik/homelab-infra">homelab-infra</a> ·
-<a href="https://github.com/s-toufik/kube-charts">kube-charts</a> ·
-<a href="https://github.com/s-toufik/pycraftcore">pycraftcore</a> ·
-<a href="https://github.com/s-toufik/archetype">archetype</a> ·
-<a href="https://github.com/s-toufik/pricelab-core">pricelab-core</a>
-</sub>
-
-</div>
-
-I build software the way I'd like to maintain it: **clear layers, small swappable parts, and tests that guard the architecture**. My playground is a homelab that grows into a real platform: an AI agent with its own MCP tools, local language models, databases, Kafka and full observability, all on one k3s node behind a single sign-in.
-
-## The lab, from the front door to the pods
-
-**[homelab-ui](https://github.com/s-toufik/homelab-ui)** is the front door: every tool rebuilt as a page, a Status page, and the agent beside every page.
-
-<div align="center">
-  <img src="assets/homelab-ui.svg" width="100%" alt="Sketch of homelab-ui: sidebar with every tool as a page, the Status page by namespace, and the agent panel" />
-</div>
-
-Behind it, **[homelab-infra](https://github.com/s-toufik/homelab-infra)** deploys every release with helmfile and the charts from **[kube-charts](https://github.com/s-toufik/kube-charts)**. The map below is read from that helmfile every day. The numbered pods light up in turn to follow one question, from sign-in to the model, and then its trace lands in Tempo.
-
-<div align="center">
-  <img src="cards/cluster.svg" width="100%" alt="Every Helm release on the k3s node, grouped by namespace, with the path of one question through the cluster" />
 </div>
 
 ## Activity
@@ -46,7 +19,41 @@ Behind it, **[homelab-infra](https://github.com/s-toufik/homelab-infra)** deploy
   </picture>
 </div>
 
-Also building the **pricelab** platform: [pricelab-core](https://github.com/s-toufik/pricelab-core) · [pricelab-retriever](https://github.com/s-toufik/pricelab-retriever)
+## The lab, from the front door to the pods
+
+**[homelab-ui](https://github.com/s-toufik/homelab-ui)** is the front door: every tool rebuilt as a page, a Status page, and the agent beside every page.
+
+<div align="center">
+  <img src="assets/homelab-ui.svg" width="100%" alt="Sketch of homelab-ui: sidebar with every tool as a page, the Status page by namespace, and the agent panel" />
+</div>
+
+Behind it, **[homelab-infra](https://github.com/s-toufik/homelab-infra)** deploys every release with helmfile and the charts from **[kube-charts](https://github.com/s-toufik/kube-charts)**. The map below is read from that helmfile every day. The numbered pods light up in turn to follow one question, from sign-in to the model, and then its trace lands in Tempo.
+
+<div align="center">
+  <img src="cards/cluster.svg" width="100%" alt="Every Helm release on the k3s node, grouped by namespace, with the path of one question through the cluster" />
+</div>
+
+## Repositories
+
+**Agents**
+- [agent-runtime](https://github.com/s-toufik/agent-runtime): planning, execution, reflection and decision-making workflows that produce reliable answers
+- [agent-toolbox](https://github.com/s-toufik/agent-toolbox): the MCP tool server the agent calls
+
+**Homelab**
+- [homelab-ui](https://github.com/s-toufik/homelab-ui): the front door, with every tool as a page and the agent beside it
+- [homelab-infra](https://github.com/s-toufik/homelab-infra): the whole platform on one k3s node, deployed with helmfile
+- [kube-charts](https://github.com/s-toufik/kube-charts): the Helm charts the homelab runs on
+
+**Libraries and templates**
+- [pycraftcore](https://github.com/s-toufik/pycraftcore): reusable infrastructure and adapters for Python applications
+- [archetype](https://github.com/s-toufik/archetype): a pragmatic hexagonal architecture template for Python, Rust and C++
+
+**pricelab**
+- [pricelab-core](https://github.com/s-toufik/pricelab-core): core library of the pricing platform
+- [pricelab-retriever](https://github.com/s-toufik/pricelab-retriever): retrieves data from various sources
+
+**Experiments**
+- [web_framework_benchmark](https://github.com/s-toufik/web_framework_benchmark): every web framework under the same load, compared
 
 ## Stack
 

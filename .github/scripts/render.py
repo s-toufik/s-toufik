@@ -55,30 +55,63 @@ def ago(value: str) -> int:
 # --- hero: a terminal session -----------------------------------------------------------------
 
 
+def about_line(line: str) -> str:
+    """One line of about.md, coloured like a terminal markdown viewer."""
+    if line.startswith("# "):
+        return f'<tspan fill="{SKY}" font-weight="600">{escape(line)}</tspan>'
+    if line.startswith("- "):
+        return f'<tspan fill="{BLUE}">  ▸ </tspan><tspan fill="{FG}">{escape(line[2:])}</tspan>'
+    return f'<tspan fill="{MUTED}">{escape(line)}</tspan>'
+
+
 def hero(config: dict, repositories: list[dict]) -> str:
     by_name = {repo["name"].lower(): repo for repo in repositories}
     rows = [(item, by_name[item["repo"].lower()]) for item in config["featured"] if item["repo"].lower() in by_name]
-    width, top = 840, 186
-    height = top + len(rows) * 22 + 46
+    width = 840
     prompt = f'<tspan fill="{BLUE}">toufik@homelab</tspan><tspan fill="{FAINT}">:~$ </tspan>'
-    lines, delay = [], 1.35
+    out: list[str] = []
+    y, delay = 68, .1
+
+    def emit(content: str, gap: int = 22, pause: float = .1, attrs: str = "") -> None:
+        nonlocal y, delay
+        out.append(f'<text x="24" y="{y}" class="typed" style="animation-delay:{delay:.2f}s"{attrs}>{content}</text>')
+        y += gap
+        delay += pause
+
+    emit(f'{prompt}<tspan fill="{FG}">whoami</tspan>', pause=.3)
+    emit(f'<tspan fill="{FG}">{escape(config["name"])}</tspan>', gap=20)
+    emit(f'<tspan fill="{MUTED}">{escape(config["tagline"])}</tspan>', gap=32, pause=.4)
+
+    emit(f'{prompt}<tspan fill="{FG}">cat about.md</tspan>', pause=.3)
+    for line in config.get("about", []):
+        emit(about_line(line) if line else "", gap=20 if line else 10, pause=.08)
+    y += 12
+
+    emit(f'{prompt}<tspan fill="{FG}">homelab status --apps</tspan>', gap=24, pause=.3)
+    emit('<tspan x="44">SERVICE</tspan><tspan x="234">LANG</tspan><tspan x="354">STATE</tspan><tspan x="434">LAST PUSH</tspan><tspan x="534">ROLE</tspan>',
+         gap=20, pause=.15, attrs=f' fill="{FAINT}" font-size="12" letter-spacing=".08em"')
     for index, (item, repo) in enumerate(rows):
-        y = top + index * 22
         days = ago(repo["pushed_at"])
         state, color = ("ready", OK) if days <= 14 else ("idle", WARN) if days <= 90 else ("dormant", FAINT)
         led = (f'<circle class="led" style="animation-delay:{index * .3:.1f}s" cx="30" cy="{y - 5}" r="4" fill="{color}"/>'
                if state == "ready" else f'<circle cx="30" cy="{y - 5}" r="4" fill="none" stroke="{color}" stroke-width="1.6"/>')
         when = "today" if days == 0 else f"{days}d ago"
-        lines.append(
-            f'<g class="typed" style="animation-delay:{delay + index * .1:.2f}s">{led}<text x="44" y="{y}">'
+        out.append(
+            f'<g class="typed" style="animation-delay:{delay:.2f}s">{led}<text x="44" y="{y}">'
             f'<tspan fill="{FG}">{escape(repo["name"])}</tspan>'
             f'<tspan x="234" fill="{MUTED}">{escape(item.get("lang") or repo["language"] or "—")}</tspan>'
             f'<tspan x="354" fill="{color}">{state}</tspan><tspan x="434" fill="{MUTED}">{when}</tspan>'
             f'<tspan x="534" fill="{FAINT}">{escape(item["role"])}</tspan></text></g>'
         )
-    end = delay + len(rows) * .1 + .25
-    last = height - 22
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Terminal: {escape(config['name'])}. {escape(config['tagline'])} Project status: {escape(', '.join(item['repo'] for item, _ in rows))}">
+        y += 22
+        delay += .1
+    y += 10
+    emit(f'{prompt}<tspan class="cursor" fill="{BLUE}">█</tspan>', gap=0)
+    height = y + 24
+
+    about = " ".join(line.lstrip("#- ") for line in config.get("about", []) if line)
+    label = f"Terminal: {config['name']}. {config['tagline']} {about} Project status: {', '.join(item['repo'] for item, _ in rows)}"
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{escape(label)}">
   <style>
     .typed {{ animation: reveal .01s steps(1) backwards; }}
     @keyframes reveal {{ from {{ opacity: 0; }} }}
@@ -93,13 +126,7 @@ def hero(config: dict, repositories: list[dict]) -> str:
   <circle cx="22" cy="18" r="6" fill="#f87171" fill-opacity=".8"/><circle cx="42" cy="18" r="6" fill="#fbbf24" fill-opacity=".8"/><circle cx="62" cy="18" r="6" fill="#34d399" fill-opacity=".8"/>
   <text x="{width // 2}" y="23" text-anchor="middle" font-family="{MONO}" font-size="12" fill="{FAINT}">toufik@homelab: ~ — ssh over tailscale</text>
   <g font-family="{MONO}" font-size="14">
-    <text x="24" y="68" class="typed" style="animation-delay:.1s">{prompt}<tspan fill="{FG}">whoami</tspan></text>
-    <text x="24" y="90" class="typed" style="animation-delay:.4s" fill="{FG}">{escape(config["name"])}</text>
-    <text x="24" y="110" class="typed" style="animation-delay:.5s" fill="{MUTED}">{escape(config["tagline"])}</text>
-    <text x="24" y="142" class="typed" style="animation-delay:.9s">{prompt}<tspan fill="{FG}">homelab status --apps</tspan></text>
-    <text x="24" y="166" class="typed" style="animation-delay:1.2s" fill="{FAINT}" font-size="12" letter-spacing=".08em"><tspan x="44">SERVICE</tspan><tspan x="234">LANG</tspan><tspan x="354">STATE</tspan><tspan x="434">LAST PUSH</tspan><tspan x="534">ROLE</tspan></text>
-    {"".join(lines)}
-    <text x="24" y="{last}" class="typed" style="animation-delay:{end:.2f}s">{prompt}<tspan class="cursor" fill="{BLUE}">█</tspan></text>
+    {"".join(out)}
   </g>
 </svg>
 """
