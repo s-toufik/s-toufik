@@ -65,7 +65,7 @@
     },
     {
       "repo": "pricelabr-core",
-      "role": "pricelab core in Rust (exp.)",
+      "role": "pricelab core in Rust, exp.",
       "lang": "Rust",
       "state": "idle"
     },
@@ -73,6 +73,11 @@
       "repo": "blender",
       "role": "Blender experiments",
       "state": "idle"
+    },
+    {
+      "repo": "Orion",
+      "role": "data post-processing API",
+      "state": "decommissioned"
     }
   ],
   "cluster": {

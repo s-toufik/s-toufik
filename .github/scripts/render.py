@@ -91,22 +91,27 @@ def hero(config: dict, repositories: list[dict]) -> str:
     y += 12
 
     emit(f'{prompt}<tspan fill="{FG}">homelab status --apps</tspan>', gap=24, pause=.3)
-    emit('<tspan x="44">SERVICE</tspan><tspan x="234">LANG</tspan><tspan x="354">STATE</tspan><tspan x="434">LAST PUSH</tspan><tspan x="534">ROLE</tspan>',
+    emit('<tspan x="44">SERVICE</tspan><tspan x="234">LANG</tspan><tspan x="354">STATE</tspan><tspan x="484">LAST PUSH</tspan><tspan x="584">ROLE</tspan>',
          gap=20, pause=.15, attrs=f' fill="{FAINT}" font-size="12" letter-spacing=".08em"')
     for index, (item, repo) in enumerate(rows):
         days = ago(repo["pushed_at"])
         # a state set in profile.json wins; otherwise it comes from the last push
         state = item.get("state") or ("ready" if days <= 14 else "idle" if days <= 90 else "dormant")
         color = {"ready": OK, "idle": WARN}.get(state, FAINT)
-        led = (f'<circle class="led" style="animation-delay:{index * .3:.1f}s" cx="30" cy="{y - 5}" r="4" fill="{color}"/>'
-               if state == "ready" else f'<circle cx="30" cy="{y - 5}" r="4" fill="none" stroke="{color}" stroke-width="1.6"/>')
+        if state == "ready":
+            led = f'<circle class="led" style="animation-delay:{index * .3:.1f}s" cx="30" cy="{y - 5}" r="4" fill="{color}"/>'
+        elif state == "decommissioned":
+            led = f'<path d="M26.5 {y - 8.5}l7 7m0-7l-7 7" stroke="{FAINT}" stroke-width="1.6" stroke-linecap="round"/>'
+        else:
+            led = f'<circle cx="30" cy="{y - 5}" r="4" fill="none" stroke="{color}" stroke-width="1.6"/>'
+        name_style = f' fill="{FAINT}" text-decoration="line-through"' if state == "decommissioned" else f' fill="{FG}"'
         when = "today" if days == 0 else f"{days}d ago"
         out.append(
             f'<g class="typed" style="animation-delay:{delay:.2f}s">{led}<text x="44" y="{y}">'
-            f'<tspan fill="{FG}">{escape(repo["name"])}</tspan>'
+            f'<tspan{name_style}>{escape(repo["name"])}</tspan>'
             f'<tspan x="234" fill="{MUTED}">{escape(item.get("lang") or repo["language"] or "—")}</tspan>'
-            f'<tspan x="354" fill="{color}">{state}</tspan><tspan x="434" fill="{MUTED}">{when}</tspan>'
-            f'<tspan x="534" fill="{FAINT}">{escape(item["role"])}</tspan></text></g>'
+            f'<tspan x="354" fill="{color}">{state}</tspan><tspan x="484" fill="{MUTED}">{when}</tspan>'
+            f'<tspan x="584" fill="{FAINT}">{escape(item["role"])}</tspan></text></g>'
         )
         y += 22
         delay += .1

@@ -63,6 +63,9 @@
 - [web_framework_benchmark](https://github.com/s-toufik/web_framework_benchmark): every web framework under the same load, compared
 - [blender](https://github.com/s-toufik/blender): Blender experiments
 
+**Retired**
+- [Orion](https://github.com/s-toufik/Orion): a Python API for post-processing large-scale data, now decommissioned
+
 ## Stack
 
 **Languages**
