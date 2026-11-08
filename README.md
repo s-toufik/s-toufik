@@ -19,18 +19,12 @@
   </picture>
 </div>
 
-## The lab, from the front door to the pods
+## The homelab
 
-**[homelab-ui](https://github.com/s-toufik/homelab-ui)** is the front door: every tool rebuilt as a page, a Status page, and the agent beside every page.
-
-<div align="center">
-  <img src="assets/homelab-ui.svg" width="100%" alt="Sketch of homelab-ui: sidebar with every tool as a page, the Status page by namespace, and the agent panel" />
-</div>
-
-Behind it, **[homelab-infra](https://github.com/s-toufik/homelab-infra)** deploys every release with helmfile and the charts from **[kube-charts](https://github.com/s-toufik/kube-charts)**. The map below is read from that helmfile every day. The numbered pods light up in turn to follow one question, from sign-in to the model, and then its trace lands in Tempo.
+**[homelab-infra](https://github.com/s-toufik/homelab-infra)** runs the whole platform on one k3s node, deploying every release with helmfile and the charts from **[kube-charts](https://github.com/s-toufik/kube-charts)**. The map below is read from that helmfile every day. The numbered pods light up in turn to follow one question, from sign-in to the model, and then its trace lands in Tempo.
 
 <div align="center">
-  <img src="cards/cluster.svg" width="100%" alt="Every Helm release on the k3s node, grouped by namespace, with the path of one question through the cluster" />
+  <a href="https://github.com/s-toufik/homelab-infra"><img src="cards/cluster.svg" width="100%" alt="Every Helm release on the homelab-infra k3s node, grouped by namespace, with the path of one question through the cluster" /></a>
 </div>
 
 ## Repositories
