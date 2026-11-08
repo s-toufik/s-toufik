@@ -1,10 +1,9 @@
-"""Render every profile card and a trace of the run that drew them.
+"""Render every profile card.
 
 Usage: render.py <login> <config.json> <output-dir>
 
-Each step is timed as a span; the spans become cards/trace.svg, so the README shows
-the telemetry of the pipeline that rendered it. A step that fails keeps the card
-committed by the previous run instead of failing the whole job.
+Each step is timed and logged. A step that fails keeps the card committed by the
+previous run instead of failing the whole job.
 """
 
 import json
@@ -207,63 +206,6 @@ def cluster(config: dict, found: list[tuple[str, str]]) -> str:
 """
 
 
-# --- trace: the waterfall of this run --------------------------------------------------------
-
-
-def trace(spans: list[dict], total: float) -> str:
-    width, left, right, row = 840, 250, 818, 24
-    height = 76 + len(spans) * row + 30
-    scale = (right - left) / total
-    ticks = [total * i / 4 for i in range(5)]
-    grid = "".join(f'<line x1="{left + t * scale:.1f}" y1="44" x2="{left + t * scale:.1f}" y2="{height - 30}" stroke="{SOFT}"/>' for t in ticks)
-    labels = "".join(
-        f'<text x="{left + t * scale:.1f}" y="{height - 14}" text-anchor="{"start" if i == 0 else "end" if i == 4 else "middle"}">{t:.1f} s</text>'
-        for i, t in enumerate(ticks)
-    )
-    bars = []
-    for index, item in enumerate(spans):
-        y = 58 + index * row
-        root = index == 0
-        color = DEEP if root else (SKY if item["name"].startswith(("github", "graphql")) else BLUE)
-        if not item["ok"]:
-            color = WARN
-        name = item["name"] + (f" ×{item['count']}" if item["count"] else "")
-        x, w = left + item["start"] * scale, max(2.0, item["duration"] * scale)
-        ms = f"{item['duration'] * 1000:,.0f} ms"
-        # the duration goes after the bar, or inside its end when the bar reaches the right edge
-        text_w = len(ms) * 6.5
-        if x + w + 6 + text_w < right:    # after the bar
-            label = f'<text x="{x + w + 6:.1f}" y="{y + 10}" font-size="10.5" fill="{FAINT}">{ms}</text>'
-        elif w > text_w + 12:             # inside the end of a long bar
-            label = f'<text x="{x + w - 6:.1f}" y="{y + 10}" font-size="10.5" fill="{INK}" text-anchor="end">{ms}</text>'
-        else:                             # before a short bar at the right edge
-            label = f'<text x="{x - 6:.1f}" y="{y + 10}" font-size="10.5" fill="{FAINT}" text-anchor="end">{ms}</text>'
-        bars.append(
-            f'<text x="{20 if root else 34}" y="{y + 10}" fill="{FG if root else MUTED}">{escape(name)}</text>'
-            f'<rect class="grow" style="animation-delay:{index * .08:.2f}s" x="{x:.1f}" y="{y}" width="{w:.1f}" height="12" rx="3" fill="{color}"/>'
-            + label
-        )
-    failed = sum(1 for item in spans if not item["ok"])
-    stamp = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
-    status = f"{failed} failed" if failed else "all ok"
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Trace of the run that rendered this profile on {stamp}: {len(spans)} spans in {total:.1f} seconds, {status}">
-  <style>
-    .grow {{ transform-box: fill-box; transform-origin: left; animation: grow .7s cubic-bezier(.2,.7,.2,1) backwards; }}
-    @keyframes grow {{ from {{ transform: scaleX(0); }} }}
-    @media (prefers-reduced-motion: reduce) {{ .grow {{ animation: none; }} }}
-  </style>
-  <g font-family="{MONO}" font-size="12">
-    <rect x=".5" y=".5" width="{width - 1}" height="{height - 1}" rx="12" fill="{INK}" stroke="{LINE}"/>
-    <text x="20" y="30" fill="{FG}" font-size="13">trace render-profile</text>
-    <text x="820" y="30" text-anchor="end" fill="{FAINT}">{stamp} · {len(spans)} spans · {total:.1f} s · {status}</text>
-    {grid}
-    <g fill="{FAINT}" font-size="10.5">{labels}</g>
-    {"".join(bars)}
-  </g>
-</svg>
-"""
-
-
 def main() -> None:
     login, config_path, output = sys.argv[1], Path(sys.argv[2]), Path(sys.argv[3])
     config = json.loads(config_path.read_text())
@@ -276,28 +218,29 @@ def main() -> None:
             repositories = owned_repositories(login, token)
         with span("github.achievements"):
             write(output / "achievements.svg", achievements.render(achievements.collect(login, token)))
-        with span("github.languages", sum(1 for repo in repositories if cards.counts_for_languages(repo, login))):
-            write(output / "languages.svg", cards.languages_card(cards.language_totals(repositories, login, token)))
+        if repositories:  # without the repo list, keep yesterday's languages and hero cards
+            with span("github.languages", sum(1 for repo in repositories if cards.counts_for_languages(repo, login))):
+                write(output / "languages.svg", cards.languages_card(cards.language_totals(repositories, login, token)))
         if token:
             with span("graphql.contributions"):
                 write(output / "streak.svg", cards.streak_card(cards.contribution_days(login, token)))
-            found: list[tuple[str, str]] = []
+        found: list[tuple[str, str]] = []
         with span("github.helmfile"):
             settings = config["cluster"]
             found = releases(get_file(f"{login}/{settings['repo']}", settings["helmfile"], token))
-        with span("render.hero"):
-            write(output / "hero.svg", hero(config, repositories))
+        if repositories:
+            with span("render.hero"):
+                write(output / "hero.svg", hero(config, repositories))
         if found:
             with span("render.cluster", len(found)):
                 write(output / "cluster.svg", cluster(config, found))
-    
+
     # SPANS holds children before their parent; show the root first, then children by start time.
     root_span = SPANS[-1]
     ordered = [root_span] + sorted(SPANS[:-1], key=lambda item: item["start"])
-    write(output / "trace.svg", trace(ordered, root_span["duration"]))
     for item in ordered:
         print(f"{'ok ' if item['ok'] else 'ERR'} {item['duration'] * 1000:7.0f} ms  {item['name']}")
-    # A failed step keeps last run's card and shows up in amber on the trace; the job still commits the rest.
+    # A failed step keeps last run's card; the job still commits the rest.
     failed = [item["name"] for item in ordered if not item["ok"]]
     if failed:
         print(f"::warning::steps failed: {', '.join(failed)}")

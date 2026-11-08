@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Hero, cluster map, achievements, languages, streak, and the trace of this run.
+      # Hero, cluster map, achievements, languages and streak.
       # Featured projects and the cluster settings live in .github/profile.json.
       - name: Render the profile
         run: python3 .github/scripts/render.py "${{ github.repository_owner }}" .github/profile.json cards

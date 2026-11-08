@@ -31,14 +31,6 @@ Behind it, **[homelab-infra](https://github.com/s-toufik/homelab-infra)** deploy
   <img src="cards/cluster.svg" width="100%" alt="Every Helm release on the k3s node, grouped by namespace, with the path of one question through the cluster" />
 </div>
 
-## This page renders itself
-
-A daily GitHub Action draws every card on this page. It times each step it runs and draws them as a trace, the same way Tempo shows a request.
-
-<div align="center">
-  <img src="cards/trace.svg" width="100%" alt="Trace of the last run that rendered this profile" />
-</div>
-
 ## Activity
 
 <div align="center">
