@@ -146,6 +146,7 @@ def hero(config: dict, repositories: list[dict]) -> str:
 
 NEXUS_COLORS = {"Projects": BLUE, "Knowledge": "#a78bfa", "Paths": "#34d399", "Sources": "#fbbf24",
                 "Log": "#f472b6", "System": MUTED}
+GRAPH_HEIGHT = 560
 WIKILINK = re.compile(r"\[\[([^\]|#]+)")
 
 
@@ -180,22 +181,49 @@ def nexus(config: dict, notes: dict[str, str], repo: dict | None) -> str:
         degree[a] += 1
         degree[b] += 1
 
-    gx, gy, rx, ry = 570, 205, 178, 108
+    # the tree: every folder and its subfolders with their note counts
+    def count(prefix: str) -> int:
+        return sum(1 for path in notes if path.startswith(prefix))
+    tree = [f'<tspan fill="{FG}">nexus</tspan>']
+    top = [g for g in groups if count(g + "/")]
+    for i, group in enumerate(top):
+        last = i == len(top) - 1
+        tree.append(f'<tspan fill="{FAINT}">{"└──" if last else "├──"} </tspan><tspan fill="{NEXUS_COLORS.get(group, MUTED)}">{escape(group)}</tspan>'
+                    f'<tspan x="270" text-anchor="end" fill="{MUTED}">{count(group + "/")}</tspan>')
+        subs = sorted({p.split("/")[1] for p in notes if p.startswith(group + "/") and p.count("/") >= 2})
+        for j, sub in enumerate(subs):
+            branch = "    " if last else "│   "
+            tree.append(f'<tspan fill="{FAINT}">{branch}{"└──" if j == len(subs) - 1 else "├──"} </tspan><tspan fill="{MUTED}">{escape(sub if len(sub) <= 20 else sub[:19] + "…")}</tspan>'
+                        f'<tspan x="270" text-anchor="end" fill="{FAINT}">{count(f"{group}/{sub}/")}</tspan>')
+    height = max(GRAPH_HEIGHT, 100 + len(tree) * 19 + 56)
+
+    # A tall layout: the two biggest folders above and below Home, the small ones left and right.
+    # Every cluster is a sunflower whose spacing shrinks as the vault grows, so it always fits the card.
+    top_y, bottom_y, gx = 58, height - 50, 568
+    gy = (top_y + bottom_y) / 2
+    sizes = {g: sum(1 for p in nodes if p.startswith(g + "/")) for g in groups}
+    present = sorted((g for g in groups if sizes[g]), key=lambda g: -sizes[g])
+    half = (bottom_y - top_y) / 2 - 30 - 20          # room for one big cluster: minus Home's gap and a label
+    radius = half / 2                            # the cluster's radius, its centre half-way out
+    step = min(10.5, radius / math.sqrt(max(1, max(sizes.values()) - 1)))
+    scale = max(.45, step / 10.5)                # dots shrink with the spacing
+    centres = {}
+    for group, slot in zip(present, ["top", "bottom", "left", "right", "top-left", "bottom-right", "bottom-left", "top-right"]):
+        spread = step * math.sqrt(max(0, sizes[group] - 1))
+        side_x = {"left": -1, "right": 1, "top-left": -1, "bottom-left": -1, "top-right": 1, "bottom-right": 1}.get(slot, 0)
+        side_y = {"top": -1, "bottom": 1, "top-left": -.55, "top-right": -.55, "bottom-left": .55, "bottom-right": .55}.get(slot, 0)
+        cx = gx + side_x * 168
+        cy = gy + side_y * (30 + radius) if slot in ("top", "bottom") else gy + side_y * (half + 30) * .75
+        centres[group] = (cx, cy, spread, slot)
     position, group_label = {}, []
-    present = [g for g in groups if any(p.startswith(g + "/") for p in nodes)]
-    # biggest folders take the roomy left and right slots, the small ones go above and below
-    slots = [180, 0, -52, 128, 52, -128, 90, -90]
-    by_size = sorted(present, key=lambda g: -sum(1 for p in nodes if p.startswith(g + "/")))
-    for group, slot in zip(by_size, slots):
-        angle = math.radians(slot)
-        cx, cy = gx + rx * math.cos(angle), gy + ry * math.sin(angle)
+    for group, (cx, cy, spread, slot) in centres.items():
         members = sorted((p for p in nodes if p.startswith(group + "/")),
                          key=lambda p: (p != f"{group}/{group}.md", -degree[p], p))
         for i, path in enumerate(members):  # sunflower around the folder's own index note
-            r, a = 10.5 * math.sqrt(i), i * 2.39996
+            r, a = step * math.sqrt(i), i * 2.39996
             position[path] = (cx + r * math.cos(a), cy + r * math.sin(a))
-        spread = 10.5 * math.sqrt(max(0, len(members) - 1)) + 8
-        group_label.append(f'<text x="{cx:.0f}" y="{cy - spread - 6:.0f}" text-anchor="middle" font-size="11.5" stroke="{INK}" stroke-width="4" paint-order="stroke" '
+        label_y = cy + spread + 18 if slot.startswith("bottom") else cy - spread - 9
+        group_label.append(f'<text x="{cx:.0f}" y="{label_y:.0f}" text-anchor="middle" font-size="11.5" stroke="{INK}" stroke-width="4" paint-order="stroke" '
                            f'fill="{NEXUS_COLORS.get(group, MUTED)}">{escape(group)}</text>')
     for path in nodes:
         position.setdefault(path, (gx, gy))  # Home.md and other top-level notes sit in the middle
@@ -210,33 +238,20 @@ def nexus(config: dict, notes: dict[str, str], repo: dict | None) -> str:
         bend = (sum(map(ord, a + b)) % 41 - 20) / 20 * min(46, length * .22)  # stable per edge, fans a bundle out
         cx, cy = mx - dy / length * bend, my + dx / length * bend
         return (f'<path d="M{x1:.1f} {y1:.1f} Q{cx:.1f} {cy:.1f} {x2:.1f} {y2:.1f}" fill="none" '
-                f'stroke="{color(a) if "/" in a else color(b)}" stroke-opacity=".2" stroke-width="1"/>')
+                f'stroke="{color(a) if "/" in a else color(b)}" stroke-opacity="{edge_opacity:.2f}" stroke-width="1"/>')
 
+    edge_opacity = max(.05, .2 * min(1.0, 150 / max(1, len(edges))))  # a dense vault stays readable
     lines = "".join(curve(a, b) for a, b in sorted(edges))
     dots = []
     for index, path in enumerate(sorted(nodes, key=lambda p: degree[p])):
         x, y = position[path]
-        r = 2.6 + min(5.0, degree[path] * .45)
+        r = (2.6 + min(5.0, degree[path] * .45)) * scale
         hub = degree[path] >= 6
         cls = "node hub" if hub else "node"
         dots.append(f'<circle class="{cls}" style="animation-delay:{.3 + index * .025:.2f}s" cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{color(path)}"/>')
     home = next((p for p in nodes if "/" not in p), None)
-    home_label = (f'<text x="{gx}" y="{gy + 22}" text-anchor="middle" font-size="11.5" fill="{FG}" stroke="{INK}" stroke-width="4" paint-order="stroke">{escape(home[:-3])}</text>' if home else "")
+    home_label = (f'<text x="{gx}" y="{gy + 22:.0f}" text-anchor="middle" font-size="11.5" fill="{FG}" stroke="{INK}" stroke-width="4" paint-order="stroke">{escape(home[:-3])}</text>' if home else "")
 
-    # the tree: every folder and its subfolders with their note counts
-    def count(prefix: str) -> int:
-        return sum(1 for path in notes if path.startswith(prefix))
-    tree = [f'<tspan fill="{FG}">nexus</tspan>']
-    top = [g for g in groups if count(g + "/")] 
-    for i, group in enumerate(top):
-        last = i == len(top) - 1
-        tree.append(f'<tspan fill="{FAINT}">{"└──" if last else "├──"} </tspan><tspan fill="{NEXUS_COLORS.get(group, MUTED)}">{escape(group)}</tspan>'
-                    f'<tspan x="270" text-anchor="end" fill="{MUTED}">{count(group + "/")}</tspan>')
-        subs = sorted({p.split("/")[1] for p in notes if p.startswith(group + "/") and p.count("/") >= 2})
-        for j, sub in enumerate(subs):
-            branch = "    " if last else "│   "
-            tree.append(f'<tspan fill="{FAINT}">{branch}{"└──" if j == len(subs) - 1 else "├──"} </tspan><tspan fill="{MUTED}">{escape(sub)}</tspan>'
-                        f'<tspan x="270" text-anchor="end" fill="{FAINT}">{count(f"{group}/{sub}/")}</tspan>')
     tree_svg = "".join(
         f'<text x="24" y="{100 + i * 19}" xml:space="preserve" class="row" style="animation-delay:{.15 + i * .05:.2f}s">{line}</text>'
         for i, line in enumerate(tree)
@@ -244,7 +259,6 @@ def nexus(config: dict, notes: dict[str, str], repo: dict | None) -> str:
     total_notes = len(notes) - (1 if "README.md" in notes else 0)
     updated = f" · updated {ago(repo['pushed_at'])}d ago" if repo and ago(repo["pushed_at"]) else " · updated today" if repo else ""
     width = 840
-    height = max(392, 100 + len(tree) * 19 + 56)
     footer_y = height - 22
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Nexus, my knowledge hub: {total_notes} notes and {len(edges)} links across {', '.join(top)}, drawn as a graph of linked notes">
   <style>
