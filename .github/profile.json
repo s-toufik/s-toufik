@@ -29,6 +29,10 @@
       "role": "every stack, one server"
     },
     {
+      "repo": "kitchen-atelier",
+      "role": "recipe · nutrition studio"
+    },
+    {
       "repo": "nexus",
       "role": "knowledge hub · obsidian",
       "lang": "Markdown"

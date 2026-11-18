@@ -45,6 +45,7 @@
 - [homelab-ui](https://github.com/s-toufik/homelab-ui): the front door, with every tool as a page and the agent beside it
 - [homelab-infra](https://github.com/s-toufik/homelab-infra): the whole platform on one k3s node, deployed with helmfile
 - [kube-charts](https://github.com/s-toufik/kube-charts): the Helm charts the homelab runs on
+- [kitchen-atelier](https://github.com/s-toufik/kitchen-atelier): the backend behind the homelab's recipe and nutrition studio
 
 **Knowledge**
 - [nexus](https://github.com/s-toufik/nexus): my knowledge hub, an Obsidian vault of projects, ideas, learning paths and sources
